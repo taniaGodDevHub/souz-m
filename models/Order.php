@@ -44,10 +44,10 @@ class Order extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'client_name' => 'Client Name',
-            'client_phone' => 'Client Phone',
-            'type_order' => 'Type Order',
-            'city_id' => 'City ID',
+            'client_name' => 'Клиент',
+            'client_phone' => 'Телефон',
+            'type_order' => 'Тип заказа',
+            'city_id' => 'ID города',
         ];
     }
 
