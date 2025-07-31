@@ -1,9 +1,4 @@
 <?php
-/**
- * @link https://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license https://www.yiiframework.com/license/
- */
 
 namespace app\commands;
 
@@ -13,21 +8,9 @@ use yii\console\Controller;
 use yii\console\ExitCode;
 use yii\httpclient\Client;
 
-/**
- * This command echoes the first argument that you have entered.
- *
- * This command is provided as an example for you to learn how to create console commands.
- *
- * @author Qiang Xue <qiang.xue@gmail.com>
- * @since 2.0
- */
-class HelloController extends Controller
+class DataController extends Controller
 {
-    /**
-     * This command echoes what you have entered as the message.
-     * @param string $message the message to be echoed.
-     * @return int Exit code
-     */
+
     public function actionGetCities()
     {
         $client = new Client();
@@ -35,7 +18,7 @@ class HelloController extends Controller
             ->setMethod('GET')
             ->setUrl('https://souz-m.ru/getCities.php')
             ->send();
-        //var_dump($result->getContent());
+
         $result = json_decode($result->getContent());
 
         foreach ($result as $city) {
