@@ -11,6 +11,7 @@ use yii\httpclient\Client;
 class DataController extends Controller
 {
 
+    public $enableCsrfValidation = false;
     public function actionGetCities()
     {
         $client = new Client();
