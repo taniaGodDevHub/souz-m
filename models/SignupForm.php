@@ -15,6 +15,8 @@ class SignupForm extends Model
     public $email;
     public $password;
     public $role;
+    public $tg_login;
+    public $dealer_id;
     /**
      * @inheritdoc
      */
@@ -30,6 +32,9 @@ class SignupForm extends Model
             ['email', 'email'],
             ['email', 'string', 'max' => 255],
             ['email', 'unique', 'targetClass' => '\app\models\User', 'message' => 'This email address has already been taken.'],
+            ['tg_login', 'unique', 'targetClass' => '\app\models\User', 'message' => 'Этот логин уже используется'],
+            ['dealer_id', 'required'],
+            ['dealer_id', 'integer'],
             ['password', 'required'],
             ['password', 'string', 'min' => 6],
             ['role', 'required'],
@@ -59,8 +64,20 @@ class SignupForm extends Model
         $user->email = $this->email;
         $user->setPassword($this->password);
         $user->generateAuthKey();
-        
-        return $user->save() ? $user : null;
+        $user->tg_login = $this->tg_login;
+
+        if (!$user->save()) {
+            Yii::$app->session->setFlash('Регистрация не удалась');
+            return null;
+        }
+
+        $profile = new UserProfile();
+        $profile->user_id = $user->id;
+        $profile->dealer_id = $this->dealer_id;
+        if (!$profile->save()) {
+            Yii::$app->session->setFlash('Не удалось создать профиль. Создайте его в настройках профиля');
+        }
+        return $user;
     }
 
     public function attributeLabels()
@@ -69,6 +86,8 @@ class SignupForm extends Model
             'username' => 'Логин',
             'password' => 'Пароль',
             'email' => 'Email',
+            'tg_login' => 'Логин в TG без @',
+            'dealer_id' => 'Дилер',
         ];
     }
 

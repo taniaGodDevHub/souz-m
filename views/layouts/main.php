@@ -41,15 +41,20 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         'options' => ['class' => 'navbar-nav'],
         'items' => [
             ['label' => 'Главная', 'url' => ['/site/index']],
+            !Yii::$app->user->isGuest ?
+                ['label' => 'Профиль', 'url' => ['/user-profile/update', 'user_id' => Yii::$app->user->identity->id]]: '',
             Yii::$app->user->can('admin') ?
                 [
                     'label' => 'Пользователи',
                     'items'=>[
                         ['label' => 'Управление пользователями', 'url' => ['/users/users/index']],
+                        ['label' => 'Профили пользователей', 'url' => ['/user-profile/index']],
                         ['label' => 'Роли и разрешения', 'url' => ['/rbac/auth-item/index']],
                         ['label' => 'Наследования', 'url' => ['/rbac/auth-item-child/index']],
                     ]
                 ] : '',
+            Yii::$app->user->isGuest ?
+                ['label' => 'Регистрация', 'url' => ['/site/signup']]  : '',
             Yii::$app->user->can('admin') ?
                         ['label' => 'Заказы', 'url' => ['/order-crud/index']] : '',
             Yii::$app->user->isGuest
