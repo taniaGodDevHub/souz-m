@@ -59,8 +59,24 @@ class DataController extends AccessController
         if(!$this->request->isPost){
             throw new BadRequestHttpException("Only POST request is allowed");
         }
+
         $data = json_decode(file_get_contents('php://input'), true);
 
+        if(!isset($data['dealer_id'])){
+            throw new BadRequestHttpException("Dealer_id is required");
+        }
+        if(!isset($data['client_name'])){
+            throw new BadRequestHttpException("Client_name is required");
+        }
+        if(!isset($data['client_phone'])){
+            throw new BadRequestHttpException("Client_phone is required");
+        }
+        if(!isset($data['type_order'])){
+            throw new BadRequestHttpException("Type_order is required");
+        }
+        if(!isset($data['products'])){
+            throw new BadRequestHttpException("Products is required");
+        }
         //print_r($data);die();
         $transaction = Yii::$app->db->beginTransaction();
         try{
