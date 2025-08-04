@@ -87,7 +87,7 @@ class DataController extends AccessController
 
         }catch (\Exception $e){
             $transaction->rollBack();
-            throw new Exception($e->getMessage());
+            throw new Exception($e);
 
         }
 
