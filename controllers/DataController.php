@@ -126,10 +126,18 @@ class DataController extends AccessController
             ->with('profileWithUser')
             ->one();
 
-        if(!empty($dealer) && !empty($dealer->profileWithUser) && !empty($dealer->profileWithUser->user)){
+        if(!empty($dealer)){
+            if(!empty($dealer->profileWithUser) && !empty($dealer->profileWithUser->user)){
+                $user = $dealer->profileWithUser->user;
+            }else{
+                $msg .= "\n !!!! В системе нет аккаунта TG для запрошенного дилера: " . $dealer->name ."!!!!!";
+                $user = User::find()
+                    ->where(['username' => 'admin'])
+                    ->one();
+            }
 
-            $user = $dealer->profileWithUser->user;
         }else{
+            $msg .= "\n !!!! В системе нет дилера c ID: " . $order->dealer_id ."!!!!!";
             $user = User::find()
                 ->where(['username' => 'admin'])
                 ->one();
