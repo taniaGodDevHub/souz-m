@@ -61,7 +61,7 @@ class DataController extends AccessController
         }
         $data = json_decode(file_get_contents('php://input'), true);
 
-        print_r($data);die();
+        //print_r($data);die();
         $transaction = Yii::$app->db->beginTransaction();
         try{
             $order = new Order();
