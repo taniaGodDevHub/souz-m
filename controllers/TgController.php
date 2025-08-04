@@ -49,13 +49,6 @@ class TgController extends AccessController
             return true;
         }
 
-        $tgMessage = new TgMessage();
-        $tgMessage->chat_id = $this->chat_id;
-        $tgMessage->message_id = $this->telegram->input->message->message_id;
-        $tgMessage->author_id = $this->telegram->input->message->from->id;
-        $tgMessage->text = $this->command;
-        $tgMessage->save();
-
         switch ($this->command){
             case '/start':
 
@@ -63,7 +56,7 @@ class TgController extends AccessController
                 break;
             case '/connect':
 
-                $this->connect_user($this->username, $this->chat_id);
+                $this->connect_user();
                 break;
             default:
 
@@ -71,81 +64,7 @@ class TgController extends AccessController
 
                 break;
         }
-    }
-
-    private function selectManager()
-    {
-        $managers = User::find()
-            ->joinWith('role')
-            ->where(['auth_assignment.item_name' => 'user'])
-            ->andWhere(['not', ['tg_id' => null]])
-            ->all();
-
-        if(empty($managers)){
-
-            $this->telegram->sendMessage([
-                'chat_id' => $this->chat_id,
-                'text' => "Сейчас нет ни одного менеджера в системе.",
-            ]);
-            exit();
-        }
-
-        $issetManager = ManagerToChat::find()
-            ->where(['chat_id' => $this->chat_id])
-            ->with('managerProfile')
-            ->one();
-
-        if(!empty($issetManager)){
-            $this->telegram->sendMessage([
-                'chat_id' => $this->chat_id,
-                'text' => "Вам уже назначен менеджер: \n
-    ".$issetManager->managerProfile->f." ".$issetManager->managerProfile->i." ".$issetManager->managerProfile->o." \n
-    Телефон: ".$issetManager->managerProfile->tel." ".(!empty($issetManager->managerProfile->sub_tel) ? " доб. ".$issetManager->managerProfile->sub_tel : '')." \n
-    Email: ".$issetManager->managerProfile->email." \n
-    Часы работы: ".$issetManager->managerProfile->work_time." \n
-    Вы можете написать ему в этом чате"
-            ]);
-            exit();
-        }
-
-        //Выбираем менеджера с минимальным количеством чатов
-        $counts = [];
-
-        foreach($managers as $manager){
-            $counts[$manager->id] = ManagerToChat::find()->count();;
-        }
-
-        $minValue = min($counts);
-        $keyOfMinValue = array_keys($counts, $minValue)[0];
-
-        $newMTC = new ManagerToChat();
-        $newMTC->chat_id = $this->chat_id;
-        $newMTC->manager_id = $keyOfMinValue;
-        $newMTC->client_id = $this->chat_id;
-        $newMTC->save();
-
-        $newManager = UserProfile::find()
-            ->where(['user_id' => $newMTC->manager_id])
-            ->one();
-
-        $newManagerUser = User::findOne(['id' => $newMTC->manager_id]);
-
-        $this->telegram->sendMessage([
-            'chat_id' => $this->chat_id,
-            'text' => "Ваш менеджер: \n
-    ".$newManager->f." ".$newManager->i." ".$newManager->o." \n
-    Телефон: ".$newManager->tel." ".(!empty($newManager->sub_tel) ? " доб. ".$newManager->sub_tel : '')." \n
-    Email: ".$newManager->email." \n
-    Часы работы: ".$newManager->work_time ."\n 
-    
-    Он уже на связи в этом чате."
-        ]);
-
-        $this->telegram->sendMessage([
-            'chat_id' => $newManagerUser->tg_id,
-            'text' => "Новый клиент: " . $this->clientFirstName
-        ]);
-        exit();
+        return true;
     }
 
     /**
