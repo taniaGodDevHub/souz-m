@@ -43,7 +43,7 @@ class DataController extends AccessController
      * @throws BadRequestHttpException
      * @throws Exception
      */
-    public function setOrder()
+    public function actionGetOrder()
     {
         /*{
               client_name: "",
