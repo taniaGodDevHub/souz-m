@@ -15,6 +15,7 @@ class AccessController extends Controller
 
         if (!\Yii::$app->user->can($premissionName)
             && $premissionName != 'tg_index'
+            && $premissionName != 'data_set_order'
             && $premissionName != 'data_get_city'
             && $premissionName != 'site_index'
             && $premissionName != 'site_signup'
