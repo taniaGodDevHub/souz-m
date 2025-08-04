@@ -60,4 +60,9 @@ class UserProfile extends \yii\db\ActiveRecord
         return $this->hasOne(Dealers::className(),['id'=>'dealer_id']);
     }
 
+    public function getUser()
+    {
+        return $this->hasOne(User::className(),['id'=>'user_id']);
+    }
+
 }

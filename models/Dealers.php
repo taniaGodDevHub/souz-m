@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\debug\models\search\Profile;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -57,5 +58,10 @@ class Dealers extends \yii\db\ActiveRecord
 
     public static function getList(){
         return ArrayHelper::map(Dealers::find()->all(),'id','name');
+    }
+
+    public function getProfileWithUser()
+    {
+        return $this->hasOne(UserProfile::className(), ['dealer_id' => 'id'])->with(['user']);
     }
 }
