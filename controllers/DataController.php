@@ -135,8 +135,8 @@ class DataController extends AccessController
                 ->one();
         }
 
-        $this->telegram = Yii::$app->telegram;
-        $this->telegram->sendMessage([
+        $telegram = Yii::$app->telegram;
+        $telegram->sendMessage([
             'chat_id' => $user->tg_id,
             'text' => $msg
         ]);
