@@ -73,6 +73,15 @@ class DataController extends AccessController
             ->asArray()
             ->all());
     }
+    public function actionGetDelerByCityId($city_id)
+    {
+
+
+        return $this->asJson(Dealers::find()
+            ->where(['city_id' => $city_id])
+            ->asArray()
+            ->all());
+    }
 
     /**
      * Получает заказ и отправляет сообщение в ТГ соответствующему дилеру
@@ -186,4 +195,5 @@ class DataController extends AccessController
             'text' => $msg
         ]);
     }
+
 }
