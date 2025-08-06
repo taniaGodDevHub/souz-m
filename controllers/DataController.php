@@ -23,7 +23,7 @@ use yii\web\BadRequestHttpException;
 
 class DataController extends AccessController
 {
-    //public $enableCsrfValidation = false;
+    public $enableCsrfValidation = false;
     public function behaviors()
     {
         return [
