@@ -30,7 +30,7 @@ class DataController extends AccessController
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    '*' => ['options'], // разрешаем OPTION-запросы ко всем действиям
+                    '*' => ['options','get','post'], // разрешаем OPTION-запросы ко всем действиям
                 ],
             ],
             'corsFilter' => [
