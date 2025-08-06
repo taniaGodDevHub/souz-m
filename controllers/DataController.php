@@ -33,15 +33,7 @@ class DataController extends AccessController
                     '*' => ['options','get','post'], // разрешаем OPTION-запросы ко всем действиям
                 ],
             ],
-            'corsFilter' => [
-                'class' => \yii\filters\Cors::className(),
-                'cors' => [
-                    'Origin' => ['*'], // разрешить запросы со всех источников
-                    'Access-Control-Request-Method' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'], // разрешить методы
-                    'Access-Control-Request-Headers' => ['*'], // разрешить все заголовки
-                    'Access-Control-Allow-Credentials' => true, // разрешить использование cookies
-                ],
-            ],
+
         ];
     }
 
