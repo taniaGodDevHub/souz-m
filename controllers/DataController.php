@@ -73,7 +73,7 @@ class DataController extends AccessController
             ->asArray()
             ->all());
     }
-    public function actionGetDelerByCityId($city_id)
+    public function actionGetDealerByCityId($city_id)
     {
 
 
