@@ -23,7 +23,42 @@ use yii\web\BadRequestHttpException;
 
 class DataController extends AccessController
 {
-    public $enableCsrfValidation = false;
+    //public $enableCsrfValidation = false;
+    public function behaviors()
+    {
+        return [
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    '*' => ['options'], // разрешаем OPTION-запросы ко всем действиям
+                ],
+            ],
+            'corsFilter' => [
+                'class' => \yii\filters\Cors::className(),
+                'cors' => [
+                    'Origin' => ['*'], // разрешить запросы со всех источников
+                    'Access-Control-Request-Method' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'], // разрешить методы
+                    'Access-Control-Request-Headers' => ['*'], // разрешить все заголовки
+                    'Access-Control-Allow-Credentials' => true, // разрешить использование cookies
+                ],
+            ],
+        ];
+    }
+
+    public function beforeAction($action)
+    {
+        if (parent::beforeAction($action)) {
+            if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+                header('Access-Control-Allow-Origin: *');
+                header('Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS');
+                header('Access-Control-Allow-Headers: Content-Type, Authorization');
+                header('Access-Control-Allow-Credentials: true');
+                die(); // останавливаем дальнейшее выполнение
+            }
+            return true;
+        }
+        return false;
+    }
     public function actionGetCity()
     {
         $ids = [
