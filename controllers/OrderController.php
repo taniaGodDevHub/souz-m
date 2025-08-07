@@ -19,6 +19,7 @@ use yii\web\BadRequestHttpException;
 
 class OrderController extends AccessController
 {
+    public $enableCsrfValidation = false;
     public function behaviors()
     {
         return [
