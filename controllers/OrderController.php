@@ -63,22 +63,22 @@ class OrderController extends AccessController
         $data = json_decode(file_get_contents('php://input'), true);
 
 
-        if(empty($data['client_name'])){
+        if(isset($data['client_name'])){
             throw new BadRequestHttpException('client_name is invalid');
         }
-        if(empty($data['client_phone'])){
+        if(isset($data['client_phone'])){
             throw new BadRequestHttpException('client_phone is invalid');
         }
-        if(empty($data['type_order']) || !in_array($data->type_order,['Konvert', 'Kovry', 'Semple'])){
+        if(isset($data['type_order']) || !in_array($data->type_order,['Konvert', 'Kovry', 'Semple'])){
             throw new BadRequestHttpException('type_order is invalid');
         }
-        if(empty($data['type_order']) ){
+        if(isset($data['type_order']) ){
             throw new BadRequestHttpException('type_order is invalid');
         }
-        if(empty($data['city_id']) ){
+        if(isset($data['city_id']) ){
             throw new BadRequestHttpException('city_id is invalid');
         }
-        if(empty($data['products'])){
+        if(isset($data['products'])){
             throw new BadRequestHttpException('products is invalid');
         }
 
