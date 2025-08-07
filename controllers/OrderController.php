@@ -96,7 +96,7 @@ class OrderController extends AccessController
             foreach ($data['products'] as $product){
                 $orderProduct = new OrderProduct();
                 $orderProduct->order_id = $order->id;
-                $orderProduct->name = $order->title;
+                $orderProduct->name = $product['title'];
                 if(!$orderProduct->save()){
                     throw new BadRequestHttpException('save order product error' . print_r($orderProduct->getErrors(), true));
                 }
