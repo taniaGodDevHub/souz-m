@@ -62,7 +62,7 @@ class OrderController extends AccessController
     {
         $data = json_decode(file_get_contents('php://input'), true);
 
-        var_dump($data);die;
+        return print_r($data,true);die;
 
         if(empty($data->client_name)){
             throw new BadRequestHttpException('client_name is invalid');
