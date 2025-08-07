@@ -70,14 +70,11 @@ class OrderController extends AccessController
         if(!isset($data['client_phone'])){
             throw new BadRequestHttpException('client_phone is invalid');
         }
-        if(!isset($data['type_order']) || !in_array($data->type_order,['Konvert', 'Kovry', 'Semple'])){
+        if(!isset($data['type_order']) || !in_array($data->type_order,['konvert', 'kovry', 'semple'])){
             throw new BadRequestHttpException('type_order is invalid');
         }
-        if(!isset($data['type_order']) ){
-            throw new BadRequestHttpException('type_order is invalid');
-        }
-        if(!isset($data['city_id']) ){
-            throw new BadRequestHttpException('city_id is invalid');
+        if(!isset($data['dealer_id']) ){
+            throw new BadRequestHttpException('dealer_id is invalid');
         }
         if(!isset($data['products'])){
             throw new BadRequestHttpException('products is invalid');
@@ -87,16 +84,16 @@ class OrderController extends AccessController
         try{
 
             $order = new Order();
-            $order->client_name = $data->client_name;
-            $order->client_phone = $data->client_phone;
-            $order->type_order = $data->type_order;
-            $order->city_id = $data->city_id;
+            $order->client_name = $data['client_name'];
+            $order->client_phone = $data['client_phone'];
+            $order->type_order = $data['type_order'];
+            $order->dealer_id = $data['dealer_id'];
 
             if(!$order->save()){
                 throw new BadRequestHttpException('save order error' . print_r($order->getErrors(), true));
             }
 
-            foreach ($data->products as $product){
+            foreach ($data['products'] as $product){
                 $orderProduct = new OrderProduct();
                 $orderProduct->order_id = $order->id;
                 $orderProduct->name = $order->title;
