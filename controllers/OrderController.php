@@ -103,6 +103,8 @@ class OrderController extends AccessController
             }
 
             $transaction->commit();
+
+            return true;
         }catch (\Throwable $e){
             $transaction->rollBack();
             throw $e;
