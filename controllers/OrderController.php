@@ -70,7 +70,7 @@ class OrderController extends AccessController
         if(!isset($data['client_phone'])){
             throw new BadRequestHttpException('client_phone is invalid');
         }
-        if(!isset($data['type_order']) || !in_array($data->type_order,['konvert', 'kovry', 'semple'])){
+        if(!isset($data['type_order']) || !in_array($data['type_order'],['konvert', 'kovry', 'semple'])){
             throw new BadRequestHttpException('type_order is invalid');
         }
         if(!isset($data['dealer_id']) ){
