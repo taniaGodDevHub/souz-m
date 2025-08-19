@@ -14,6 +14,7 @@ class AccessController extends Controller
         $premissionName = str_replace(['/', '-'], '_', $action->uniqueId);
 
         if (!\Yii::$app->user->can($premissionName)
+            && $premissionName != 'data_get_products'
             && $premissionName != 'tg_index'
             && $premissionName != 'data_set_order'
             && $premissionName != 'data_get_city'

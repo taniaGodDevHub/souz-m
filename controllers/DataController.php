@@ -11,8 +11,10 @@ use app\models\LoginForm;
 use app\models\Order;
 use app\models\OrderProduct;
 use app\models\PasswordResetRequestForm;
+use app\models\PhotoCdn;
 use app\models\ResetPasswordForm;
 use app\models\SignupForm;
+use app\models\SouzProduct;
 use app\models\User;
 use Yii;
 use yii\base\InvalidParamException;
@@ -196,4 +198,53 @@ class DataController extends AccessController
         ]);
     }
 
+    public function actionGetProducts()
+    {
+        $products = SouzProduct::find()->all();
+
+        $result = [];
+
+        foreach ($products as $kp => $p) {
+
+            $result[$kp] = $p;
+            $result[$kp]->categories = unserialize($p->categories);
+
+            $thumbnail_url = PhotoCdn::find()
+                ->where(['ex_link' => $p->thumbnail_url])
+                ->asArray()
+                ->one();
+            if(empty($thumbnail_url)){
+
+                $thumbnail_url = [
+                    'id' => false,
+                    'ex_link' => $p->thumbnail_url,
+                    'in_link' => false
+                ];
+            }
+            $result[$kp]->thumbnail_url = $thumbnail_url;
+
+            $gallery = [];
+            foreach (unserialize($p->gallery) as $g) {
+
+                $g_url = PhotoCdn::find()
+                    ->where(['ex_link' => $g])
+                    ->asArray()
+                    ->one();
+                if(empty($g_url)){
+
+                    $g_url = [
+                        'id' => false,
+                        'ex_link' => $g,
+                        'in_link' => false
+                    ];
+                }
+                $gallery[] = $g_url;
+            }
+            $result[$kp]->gallery = $gallery;
+            $result[$kp]->attributes = unserialize($p->attributes);
+
+        }
+
+        return $this->asJson($result);
+    }
 }
