@@ -86,6 +86,7 @@ class DataController extends Controller
                 $p->ex_id = $r->id;
             }
 
+            $p->title = $r->title;
             $p->description = $r->description;
             $p->sku = $r->sku;
             $p->excerpt = $r->excerpt;
