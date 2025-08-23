@@ -77,6 +77,7 @@ class DataController extends Controller
         $result = json_decode($result->getContent());
 
         foreach ($result as $r) {
+
             $p = SouzProduct::find()
                 ->where(['ex_id' => $r->id])
                 ->one();
@@ -101,7 +102,10 @@ class DataController extends Controller
             $p->permalink = $r->permalink;
             $p->attributes = serialize($r->attributes);
             $p->date_update = time();
-            $p->save();
+            if(!$p->save()){
+                throw new \Exception("Не удалось сохранить товар". print_r($p->getErrors(), true));
+            }
+
 
             $this->checkPhoto($p->thumbnail_url);
             foreach ($r->gallery as $g) {
@@ -121,7 +125,7 @@ class DataController extends Controller
     public function checkPhoto(string $link): bool
     {
         //$link = 'https://souz-shop.ru/wp-content/uploads/2025/04/7b5a0431_web.jpg-1.webp';
-        echo "link: $link \n";
+        //echo "link: $link \n";
         try {
             // Пытаемся выбрать запись из таблицы photo_cdn по внешней ссылке
             $record = PhotoCdn::find()
@@ -129,13 +133,13 @@ class DataController extends Controller
                 ->one();
 
             if ($record !== null) {
-                echo "Запись есть \n";
+                //echo "Запись есть \n";
                 // Запись найдена, проверяем наличие внутреннего пути
                 if (!empty($record['in_link'])) {
-                    echo "Ссылка заполнена \n";
+                    //echo "Ссылка заполнена \n";
                     // Внутренний путь указан, проверяем существование файла
                     if (file_exists(Yii::getAlias('@uploads'). '/'.$record['in_link'])) {
-                        echo "Файл существует \n";
+                        //echo "Файл существует \n";
                         return true; // Всё хорошо, файл найден
                     }
                 }
@@ -144,24 +148,24 @@ class DataController extends Controller
             // Если файл не найден или внутренняя ссылка пуста, начинаем процесс скачивания
             // Определяем имя файла по последней части URL
             $filename = basename(parse_url($link, PHP_URL_PATH));
-            echo "Имя файла $filename \n";
+            //echo "Имя файла $filename \n";
             $firstThreeChars = substr($filename, 0, 3);
-            echo "3 первые буквы $firstThreeChars \n";
-            echo "uploads ".Yii::getAlias('@uploads')." \n";
+            //echo "3 первые буквы $firstThreeChars \n";
+            //echo "uploads ".Yii::getAlias('@uploads')." \n";
 
             // Формируем директорию для сохранения файла
             $uploadDir = Yii::getAlias('@uploads') . '/' . $firstThreeChars;
-            echo "Грузить будем в $uploadDir \n";
+            //echo "Грузить будем в $uploadDir \n";
 
             // Создаём директорию, если её нет
             if (!is_dir($uploadDir)) {
-                echo "Папки ещё нет \n";
+                //echo "Папки ещё нет \n";
                 mkdir($uploadDir, 0777, true); // рекурсивно создаём директорию с нужными правами
             }
 
             // Генерируем внутренний путь к файлу
             $internalPath = "$uploadDir/$filename";
-            echo "Внутренний путь к файлу $internalPath \n";
+            //echo "Внутренний путь к файлу $internalPath \n";
 
             // Скачиваем файл
             $ch = curl_init($link);
