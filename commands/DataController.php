@@ -103,6 +103,10 @@ class DataController extends Controller
             $p->attributes = serialize($r->attributes);
             $p->date_update = time();
             if(!$p->save()){
+                var_dump($r->thumbnail_url);
+                echo "\n";
+                var_dump($r->permalink);
+                echo "\n";
                 throw new \Exception("Не удалось сохранить товар". print_r($p->getErrors(), true));
             }
 
