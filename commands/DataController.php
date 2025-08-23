@@ -97,7 +97,7 @@ class DataController extends Controller
             $p->stock_status = $r->stock_status;
             $p->categories = serialize($r->categories);
             $p->subcategory = serialize($r->subcategory);
-            $p->thumbnail_url = $r->thumbnail_url;
+            $p->thumbnail_url = (string)$r->thumbnail_url;
             $p->gallery = serialize($r->gallery);
             $p->permalink = $r->permalink;
             $p->attributes = serialize($r->attributes);
