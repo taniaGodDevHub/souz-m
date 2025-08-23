@@ -47,8 +47,8 @@ class SouzProduct extends \yii\db\ActiveRecord
             [['ex_id'], 'required'],
             [['ex_id', 'date_update'], 'integer'],
             [['description', 'excerpt', 'title'], 'string'],
-            [['sku', 'price', 'regular_price', 'sale_price', 'stock_status', 'categories', 'subcategory', 'thumbnail_url', 'gallery', 'permalink'], 'string', 'max' => 255],
-            [['attributes'], 'string', 'max' => 3000],
+            [['sku', 'price', 'regular_price', 'sale_price', 'stock_status', 'categories', 'subcategory', 'thumbnail_url', 'permalink'], 'string', 'max' => 255],
+            [['attributes', 'gallery'], 'string', 'max' => 3000],
         ];
     }
 
