@@ -242,6 +242,7 @@ class DataController extends AccessController
             }
             $result[$kp]->gallery = $gallery;
             $result[$kp]->attributes = unserialize($p->attributes);
+            $result[$kp]->subcategory = unserialize($p->subcategory);
 
         }
 
