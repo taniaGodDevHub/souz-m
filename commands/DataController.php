@@ -115,7 +115,9 @@ class DataController extends Controller
             }
 
             foreach ($r->gallery as $g) {
-                $this->checkPhoto($g);
+                if(is_string($g)){
+                    $this->checkPhoto($g);
+                }
             }
         }
         return ExitCode::OK;
