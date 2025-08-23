@@ -110,8 +110,10 @@ class DataController extends Controller
                 throw new \Exception("Не удалось сохранить товар". print_r($p->getErrors(), true));
             }
 
+            if(is_string($p->thumbnail_url)){
+                $this->checkPhoto($p->thumbnail_url);
+            }
 
-            $this->checkPhoto($p->thumbnail_url);
             foreach ($r->gallery as $g) {
                 $this->checkPhoto($g);
             }
