@@ -18,7 +18,7 @@ $this->title = 'crm.eds-systems';
 
                 <?php if(!Yii::$app->user->isGuest): ?>
                     <div class="col-12 text-center">При первом входе не забудьте заполнить профиль :)</div>
-                    <div class="col-12 text-center">
+                    <div class="col-12 text-center mt-5">
                         <a class="btn btn-success" href="<?= Url::to(['/user-profile/update', 'user_id' => Yii::$app->user->identity->id])?>">Перейти в профиль</a>
                     </div>
                 <?php endif;?>
