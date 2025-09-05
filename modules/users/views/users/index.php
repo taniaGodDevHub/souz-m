@@ -65,8 +65,18 @@ $this->params['breadcrumbs'][] = $this->title;
                                         return $model->status == 10 ? $block : $unblock;
                                     }
                                 ],
-                                'created_at:datetime',
-                                //'updated_at',
+                                'created_at:date',
+                                [
+
+                                    'attribute' => 'tg_id',
+                                    'label' => 'Связан с ТГ',
+                                    'format' => 'raw',
+                                    'header' => '<i class="bi bi-share"></i>',
+                                    'content' => function ($model) {
+
+                                        return '<i class="bi bi-share-fill" style="color: ' . (empty($model->tg_id) ? 'red' : 'green').';"></i>';
+                                    }
+                                ],
                             ],
                         ]); ?>
 
