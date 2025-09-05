@@ -10,10 +10,14 @@ $this->title = 'crm.eds-systems';
         <h1 class="display-4">crm.souz-m</h1>
 
         <p class="lead">
-        <div class="row justify-content-center">
-            <div class="col-md-4 col-12">Добрый день! При первом входе не забудьте заполнить профиль.</div>
-            <div class="col-md-4 col-12"></div>
-        </div>
+        <div class="col-md-4 col-12">Добрый день! </div>
+
+            <?php if(!Yii::$app->user->isGuest): ?>
+                <div class="col-md-4 col-12">При первом входе не забудьте заполнить профиль :)</div>
+                <div class="col-md-4 col-12">
+                    <a class="btn btn-success" href="<?= Url::to(['/user-profile/update', 'user_id' => Yii::$app->user->identity->id])?>">Перейти в профиль</a>
+                </div>
+            <?php endif;?>
         </p>
 
     </div>
