@@ -12,7 +12,7 @@ $this->title = 'crm.eds-systems';
         <h1 class="display-4">crm.souz-m</h1>
 
         <p class="lead">
-            <div class="row justify-content-center">
+            <div class="row justify-content-center flex-column">
 
                 <div class="col-md-4 col-12 text-center">Добрый день! </div>
 
