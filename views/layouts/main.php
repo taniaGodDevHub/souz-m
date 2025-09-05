@@ -89,7 +89,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             <div class="col-md-6 text-center text-md-start">SOUZ-M  <?= date('Y') ?></div>
             <div class="col-md-6 text-center text-md-end">
                 Developed with
-                <i id="devHeart" class="bi bi-heart-fill"></i> by PerfectTeam</div>
+                <i id="devHeart" class="bi bi-heart-fill"></i> by ShulmanProd</div>
         </div>
     </div>
 </footer>
