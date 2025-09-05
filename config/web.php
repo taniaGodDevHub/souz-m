@@ -34,7 +34,7 @@ $config = [
         ],
         'telegram' => [
             'class' => 'aki\telegram\Telegram',
-            'botToken' => '8289446161:AAGwhOLe_i-4Nk8WtwL9JPyXrKuocgDYL2w',
+            'botToken' => '8340576111:AAGwfvvwP0UBjwgTf0WlfJe2ocBdrvkdqEk'//'8289446161:AAGwhOLe_i-4Nk8WtwL9JPyXrKuocgDYL2w',
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
