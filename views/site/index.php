@@ -2,6 +2,8 @@
 
 /** @var yii\web\View $this */
 
+use yii\helpers\Url;
+
 $this->title = 'crm.eds-systems';
 ?>
 <div class="site-index">
