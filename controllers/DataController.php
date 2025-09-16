@@ -87,23 +87,13 @@ class DataController extends AccessController
 
     /**
      * Получает заказ и отправляет сообщение в ТГ соответствующему дилеру
-     * @return void
+     * @return int
      * @throws BadRequestHttpException
      * @throws Exception
      */
     public function actionSetOrder()
     {
-        /*{
-              client_name: "",
-              client_phone: "",
-              products: [
-                {
-                  title: "Neiron 900",
-                },
-              ],
-              type_order: 'Semple', //Может быть Konvert, Kovry, Semple
-              diller_id: 1
-          }*/
+
         if(!$this->request->isPost){
             throw new BadRequestHttpException("Only POST request is allowed");
         }
@@ -196,6 +186,8 @@ class DataController extends AccessController
             'chat_id' => $user->tg_id,
             'text' => $msg
         ]);
+
+        return $order->id;
     }
 
     public function actionGetProducts()
