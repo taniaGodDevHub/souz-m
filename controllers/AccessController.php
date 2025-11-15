@@ -20,6 +20,7 @@ class AccessController extends Controller
             && $premissionName != 'data_get_city'
             && $premissionName != 'data_get_dealer_by_city_id'
             && $premissionName != 'order_new_order'
+            && $premissionName != 'dealers_search_cities'
             && $premissionName != 'site_index'
             && $premissionName != 'site_signup'
             && $premissionName != 'site_login'
