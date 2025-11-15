@@ -130,56 +130,12 @@ class TgController extends AccessController
      */
     private function unknown()
     {
-        //Определяем роль написавшего
-        if (User::find()->where(['tg_id' => $this->chat_id])->exists()) {
-            //Это менеджер
-            //Если нет указание на то, что это ответ отправляем сообщение о том, что нужно именно ответить.
-            if (!$this->telegram->input->message->reply_to_message) {
 
                 $this->telegram->sendMessage([
                     'chat_id' => $this->chat_id,
-                    'text' => "Сообщение не отправлено. Для отправки сообщения используйте функцию телеграм \"Ответить\""
+                    'text' => "Эта команда не поддерживается."
                 ]);
                 exit();
-            }
-
-            $firstHashPos = strpos($this->telegram->input->message->reply_to_message['text'], '#');
-            $secondHashPos = strrpos($this->telegram->input->message->reply_to_message['text'], '#');
-
-// Извлекаем подстроку между первой и последней решеткой
-            $result = substr($this->telegram->input->message->reply_to_message['text'], $firstHashPos + 1, $secondHashPos - $firstHashPos - 1);
-
-            if (empty($result)) {
-
-                $this->telegram->sendMessage([
-                    'chat_id' => $this->chat_id,
-                    'text' => "Не удалось найти сообщение для ответа. Не найден тег клиента: " . print_r($result, true) . " Сообщение: " . $this->command
-                ]);
-                exit();
-            }
-
-            $this->telegram->sendMessage([
-                'chat_id' => (int)$result,
-                'text' => $this->command
-            ]);
-
-
-        } else {
-            //Это клиент
-            $issetManager = ManagerToChat::find()
-                ->where(['chat_id' => $this->chat_id])
-                ->with('manager')
-                ->one();
-
-            if (empty($issetManager)) {
-                $this->selectManager();
-            }
-
-            $this->telegram->sendMessage([
-                'chat_id' => $issetManager->manager->tg_id,
-                'text' => $this->command . "\nКлиент: #$this->chat_id#"
-            ]);
-        }
 
 
     }
