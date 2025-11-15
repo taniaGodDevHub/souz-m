@@ -104,7 +104,7 @@ class OrderController extends AccessController
 
             $transaction->commit();
 
-            return true;
+            return $order->id;
         }catch (\Throwable $e){
             $transaction->rollBack();
             throw $e;
