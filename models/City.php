@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "city".
@@ -40,8 +41,26 @@ class City extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
+            'name' => 'Название',
         ];
+    }
+
+    /**
+     * Получить список городов для dropdown
+     * @return array
+     */
+    public static function getList()
+    {
+        return ArrayHelper::map(City::find()->orderBy(['name' => SORT_ASC])->all(), 'id', 'name');
+    }
+
+    /**
+     * Связь с дилерскими центрами
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDealers()
+    {
+        return $this->hasMany(Dealers::className(), ['city_id' => 'id']);
     }
 
 }

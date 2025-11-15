@@ -38,6 +38,7 @@ class Dealers extends \yii\db\ActiveRecord
             [['city_id', 'name'], 'required'],
             [['city_id'], 'integer'],
             [['name', 'address', 'phone', 'email'], 'string', 'max' => 255],
+            [['email'], 'email'],
         ];
     }
 
@@ -48,10 +49,10 @@ class Dealers extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'city_id' => 'City ID',
-            'name' => 'Name',
-            'address' => 'Address',
-            'phone' => 'Phone',
+            'city_id' => 'Город',
+            'name' => 'Название',
+            'address' => 'Адрес',
+            'phone' => 'Телефон',
             'email' => 'Email',
         ];
     }
@@ -63,5 +64,14 @@ class Dealers extends \yii\db\ActiveRecord
     public function getProfileWithUser()
     {
         return $this->hasOne(UserProfile::className(), ['dealer_id' => 'id'])->with(['user']);
+    }
+
+    /**
+     * Связь с городом
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCity()
+    {
+        return $this->hasOne(City::className(), ['id' => 'city_id']);
     }
 }
