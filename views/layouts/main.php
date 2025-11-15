@@ -53,6 +53,14 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                         ['label' => 'Наследования', 'url' => ['/rbac/auth-item-child/index']],
                     ]
                 ] : '',
+                Yii::$app->user->can('admin') ?
+                [
+                    'label' => 'Списки',
+                    'items'=>[
+                        ['label' => 'Города', 'url' => ['/city/index']],
+                        ['label' => 'Диллерские центры', 'url' => ['/dealers/index']],
+                    ]
+                ] : '',
             Yii::$app->user->isGuest ?
                 ['label' => 'Регистрация', 'url' => ['/site/signup']]  : '',
             Yii::$app->user->can('admin') ?
