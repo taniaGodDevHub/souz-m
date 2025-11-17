@@ -14,7 +14,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'name')->dropDownList([
+    <?= $form->field($model, 'accept')->dropDownList([
         0 => 'Нет',
         1 => 'Да',
     ]) ?>
