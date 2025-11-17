@@ -65,13 +65,13 @@ class DataController extends AccessController
     }
     public function actionGetCity()
     {
-        $ids = [
+        /*$ids = [
             2883,1827,889,2519,2910,2152,1956,1235,2378,1325,1633,908,2656,1463,2571,1721,2377,1283,2732,
-            1428,2190,3018/*минск*/, 794,3020,3021,3028,3023,1427,2287, 2644
-        ];
+            1428,2190,3018, 794,3020,3021,3028,3023,1427,2287, 2644
+        ];*/
 
         return $this->asJson(City::find()
-            ->where(['id' => $ids])
+            ->where(['accept' => 1])
             ->asArray()
             ->all());
     }

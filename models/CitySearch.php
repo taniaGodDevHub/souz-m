@@ -17,7 +17,7 @@ class CitySearch extends City
     public function rules()
     {
         return [
-            [['id'], 'integer'],
+            [['id', 'accept'], 'integer'],
             [['name'], 'safe'],
         ];
     }
@@ -63,6 +63,7 @@ class CitySearch extends City
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
+            'accept' => $this->accept,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name]);

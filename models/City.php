@@ -9,6 +9,7 @@ use yii\helpers\ArrayHelper;
  * This is the model class for table "city".
  *
  * @property int $id
+ * @property int $accept
  * @property string $name
  */
 class City extends \yii\db\ActiveRecord
@@ -31,6 +32,7 @@ class City extends \yii\db\ActiveRecord
         return [
             [['name'], 'required'],
             [['name'], 'string', 'max' => 255],
+            [['accept'], 'integer'],
         ];
     }
 
@@ -42,6 +44,7 @@ class City extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => 'Название',
+            'accept' => 'Отображать',
         ];
     }
 

@@ -35,10 +35,20 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'name',
             [
+                'attribute' => 'accept',
+                'content' => function ($model) {
+                    return $model->accept ? 'Да' : 'Нет';
+                },
+                'filter' => [
+                    0 => 'Нет',
+                    1 => 'Да',
+                ]
+            ],
+            [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, City $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
-                 }
+                }
             ],
         ],
     ]); ?>
