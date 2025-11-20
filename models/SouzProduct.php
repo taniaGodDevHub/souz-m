@@ -24,6 +24,7 @@ use Yii;
  * @property string|null $permalink
  * @property string|null $attributes
  * @property int|null $date_update
+ * @property string|null $thumbnail_url_medium
  */
 class SouzProduct extends \yii\db\ActiveRecord
 {
@@ -49,6 +50,7 @@ class SouzProduct extends \yii\db\ActiveRecord
             [['description', 'excerpt', 'title'], 'string'],
             [['sku', 'price', 'regular_price', 'sale_price', 'stock_status'], 'string', 'max' => 255],
             [['attributes', 'gallery', 'thumbnail_url', 'permalink', 'categories', 'subcategory'], 'string', 'max' => 3000],
+            [['thumbnail_url_medium'], 'string', 'max' => 1500],
         ];
     }
 
@@ -74,6 +76,7 @@ class SouzProduct extends \yii\db\ActiveRecord
             'permalink' => 'Permalink',
             'attributes' => 'Attributes',
             'date_update' => 'Date Update',
+            'thumbnail_url_medium' => 'thumbnail_url_medium',
         ];
     }
 
