@@ -102,6 +102,7 @@ class DataController extends Controller
             $p->permalink = $r->permalink;
             $p->attributes = serialize($r->attributes);
             $p->date_update = time();
+            $p->thumbnail_url_medium = empty($r->thumbnail_url_medium) ? null : $r->thumbnail_url_medium;
             if(!$p->save()){
                 var_dump($r->thumbnail_url);
                 echo "\n";
