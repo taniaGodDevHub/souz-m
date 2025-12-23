@@ -6,7 +6,7 @@ $aliases = require __DIR__ . '/aliases.php';
 
 $config = [
     'id' => 'basic',
-    'name' => 'crm.souz-m',
+    'name' => 'crm.avarcom',
     'language' => 'ru-RU',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
@@ -51,6 +51,14 @@ $config = [
                     'maxLogFiles' => 1, // Максимальное количество файлов журнала
                     'except' => [], // Исключаемые категории
                 ],
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'levels' => ['info', 'error', 'warning'], // Логируем ошибки и предупреждения
+                    'categories' => ['billing'], // Все категории биллинга
+                    'logFile' => '@runtime/logs/billing.log', // Путь к файлу журнала
+                    'maxLogFiles' => 5, // Максимальное количество файлов журнала
+                    'except' => [], // Исключаемые категории
+                ],
             ],
         ],
         'db' => $db,
@@ -85,6 +93,15 @@ $config = [
         ],
         'users' => [
             'class' => 'app\modules\users\Users',
+        ],
+        'billing' => [
+            'class' => 'app\modules\billing\Billing',
+        ],
+        'insurance_companies' => [
+            'class' => 'app\modules\insurance_companies\InsuranceCompanies',
+        ],
+        'cars' => [
+            'class' => 'app\modules\cars\Cars',
         ],
     ],
     'params' => $params,

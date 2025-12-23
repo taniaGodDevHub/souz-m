@@ -58,13 +58,15 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                     'label' => 'Списки',
                     'items'=>[
                         ['label' => 'Города', 'url' => ['/city/index']],
-                        ['label' => 'Диллерские центры', 'url' => ['/dealers/index']],
+                        ['label' => 'Страховые компании', 'url' => ['/insurance_companies/insurance-company/index']],
+                        ['label' => 'Марки автомобилей', 'url' => ['/cars/car-mark/index']],
+                        ['label' => 'Модели автомобилей', 'url' => ['/cars/car-model/index']],
                     ]
                 ] : '',
+            !Yii::$app->user->isGuest ?
+                ['label' => 'Биллинг', 'url' => ['/billing/billing/index']] : '',
             Yii::$app->user->isGuest ?
                 ['label' => 'Регистрация', 'url' => ['/site/signup']]  : '',
-            Yii::$app->user->can('admin') ?
-                        ['label' => 'Заказы', 'url' => ['/order-crud/index']] : '',
             Yii::$app->user->isGuest
                 ? ['label' => 'Войти', 'url' => ['/site/login']]
                 : '<li class="nav-item">'
@@ -94,10 +96,10 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 <footer id="footer" class="mt-auto py-3 bg-light">
     <div class="container">
         <div class="row text-muted">
-            <div class="col-md-6 text-center text-md-start">SOUZ-M  <?= date('Y') ?></div>
+            <div class="col-md-6 text-center text-md-start">Avarcom  <?= date('Y') ?></div>
             <div class="col-md-6 text-center text-md-end">
                 Developed with
-                <i id="devHeart" class="bi bi-heart-fill"></i> by ShulmanProd</div>
+                <i id="devHeart" class="bi bi-heart-fill"></i> by PerfectTeam</div>
         </div>
     </div>
 </footer>

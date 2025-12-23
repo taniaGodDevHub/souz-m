@@ -4,12 +4,12 @@
 
 use yii\helpers\Url;
 
-$this->title = 'crm.eds-systems';
+$this->title = 'crm.avarcom';
 ?>
 <div class="site-index">
 
     <div class="jumbotron text-center bg-transparent mt-5 mb-5">
-        <h1 class="display-4">crm.souz-m</h1>
+        <h1 class="display-4">crm.avarcom</h1>
 
         <p class="lead">
             <div class="row justify-content-center">
