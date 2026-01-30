@@ -3,7 +3,7 @@
 namespace app\models;
 
 use app\modules\users\models\UserAddress;
-use app\modules\users\models\UserProfile;
+use app\models\UserProfile;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
