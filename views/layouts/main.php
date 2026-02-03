@@ -71,6 +71,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                 ] : '',
             !Yii::$app->user->isGuest ?
                 ['label' => 'Биллинг', 'url' => ['/billing/billing/index']] : '',
+            (defined('YII_ENV_DEV') && YII_ENV_DEV) ? \app\modules\devLogin\widgets\DevLoginWidget::widget([]) : '',
             Yii::$app->user->isGuest
                 ? [
                         'label' => Html::img(Yii::getAlias('@web/img/exit-btn.svg')),

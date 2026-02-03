@@ -38,9 +38,19 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         'encodeLabels' => false,
         'items' => [
             ['label' => 'Главная', 'url' => ['/advertiser/default/index']],
-            '<li class="nav-item">' . Html::beginForm(['/site/logout'])
-                . Html::submitButton('Выйти (' . Yii::$app->user->identity->username . ')', ['class' => 'nav-link btn btn-link logout'])
-                . Html::endForm() . '</li>',
+            Yii::$app->user->isGuest
+                ? [
+                'label' => Html::img(Yii::getAlias('@web/img/exit-btn.svg')),
+                'url' => ['/site/login']
+            ]
+                : '<li class="nav-item">'
+                . Html::beginForm(['/site/logout'])
+                . Html::submitButton(
+                    Html::img(Yii::getAlias('@web/img/exit-btn.svg')),
+                    ['class' => 'nav-link btn logout']
+                )
+                . Html::endForm()
+                . '</li>'
         ],
     ]);
     NavBar::end();

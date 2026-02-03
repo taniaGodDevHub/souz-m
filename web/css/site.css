@@ -7,7 +7,9 @@
     font-size: 15px;
 
 }
-
+body{
+    background-color: #F5F7F9;
+}
 main > .container {
     padding: 70px 15px 20px;
 }
@@ -151,4 +153,51 @@ h3{
     font-style: Regular;
     font-size: 15px;
     text-decoration: none;
+}
+
+
+@media (min-width: 1400px) {
+    .container-width-xxl, .container-width-xl, .container-width-lg, .container-width-md, .container-width-sm, .container-width {
+        max-width: calc(100% - 1320px);
+    }
+}
+@media (min-width: 1200px) {
+    .container-width-xl, .container-width-lg, .container-width-md, .container-width-sm, .container-width {
+        max-width: calc(100% - 1140px);
+    }
+}
+@media (min-width: 992px) {
+    .container-width-lg, .container-width-md, .container-width-sm, .container-width {
+        max-width: calc(100% - 960px);
+    }
+}
+
+@media (min-width: 768px) {
+    .container-width-md, .container-width-sm, .container-width {
+        max-width: calc(100% - 720px);
+    }
+}
+@media (min-width: 576px) {
+    .container-width-sm, .container-width {
+        max-width: calc(100% - 540px);
+    }
+}
+
+#header{
+    background-color: #FFFFFF;
+}
+.nav-link-col{
+    position: relative;
+}
+.nav-link-col:hover .nav-link-col-border{
+    display: block;
+}
+.nav-link-col-border{
+    display: none;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 3px;
+    width: 100%;
+    background-color: #F90042;
 }

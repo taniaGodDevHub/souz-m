@@ -34,6 +34,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         'options' => ['class' => 'navbar-expand-md fixed-top'],
         'innerContainerOptions' => ['class' => 'container-fluid'],
     ]);
+
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav bg-white'],
         'encodeLabels' => false,
@@ -58,9 +59,19 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                 ],
             ],
             ['label' => 'Биллинг', 'url' => ['/billing/billing/index']],
-            '<li class="nav-item">' . Html::beginForm(['/site/logout'])
-                . Html::submitButton('Выйти (' . Yii::$app->user->identity->username . ')', ['class' => 'nav-link btn btn-link logout'])
-                . Html::endForm() . '</li>',
+            Yii::$app->user->isGuest
+                ? [
+                'label' => Html::img(Yii::getAlias('@web/img/exit-btn.svg')),
+                'url' => ['/site/login']
+            ]
+                : '<li class="nav-item">'
+                . Html::beginForm(['/site/logout'])
+                . Html::submitButton(
+                    Html::img(Yii::getAlias('@web/img/exit-btn.svg')),
+                    ['class' => 'nav-link btn logout']
+                )
+                . Html::endForm()
+                . '</li>'
         ],
     ]);
     NavBar::end();

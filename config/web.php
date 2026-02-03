@@ -115,6 +115,9 @@ $config = [
         'admin' => [
             'class' => 'app\modules\admin\Admin',
         ],
+        'devLogin' => [
+            'class' => 'app\modules\devLogin\DevLogin',
+        ],
     ],
     'params' => $params,
 ];

@@ -7,6 +7,7 @@ use app\widgets\Alert;
 use yii\bootstrap5\Html;
 use yii\bootstrap5\Nav;
 use yii\bootstrap5\NavBar;
+use yii\helpers\Url;
 
 AppAsset::register($this);
 $this->registerCsrfMetaTags();
@@ -24,27 +25,45 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 </head>
 <body class="d-flex flex-column h-100">
 <?php $this->beginBody() ?>
-<header id="header">
-    <?php
-    NavBar::begin([
-        'brandImage' => Yii::getAlias('@web/img/logo.svg'),
-        'brandLabel' => 'Кабинет партнёра',
-        'brandUrl' => ['/partner/default/index'],
-        'options' => ['class' => 'navbar-expand-md fixed-top'],
-        'innerContainerOptions' => ['class' => 'container-fluid'],
-    ]);
-    echo Nav::widget([
-        'options' => ['class' => 'navbar-nav bg-white'],
-        'encodeLabels' => false,
-        'items' => [
-            ['label' => 'Главная', 'url' => ['/partner/default/index']],
-            '<li class="nav-item">' . Html::beginForm(['/site/logout'])
-                . Html::submitButton('Выйти (' . Yii::$app->user->identity->username . ')', ['class' => 'nav-link btn btn-link logout'])
-                . Html::endForm() . '</li>',
-        ],
-    ]);
-    NavBar::end();
-    ?>
+<header id="header" class="pt-3 ps-3 pe-3">
+    <div class="row justify-content-between">
+        <div class="col-md-auto">
+            <a class="navbar-brand" href="<?= URL::to(['/partner/default/index'])?>">
+                <img src="<?= Yii::getAlias('@web/img/logo.svg')?>" alt="Кабинет партнёра">
+            </a>
+        </div>
+        <div class="container-width">
+            <div class="row align-items-end h-100">
+                <div class="col-auto pb-3 nav-link-col">
+                    <a class="nav-link" href="<?= URL::to(['/partner/default/index'])?>">Главная</a>
+                    <span class="nav-link-col-border"></span>
+                </div>
+                <div class="col-auto pb-3 nav-link-col">
+                    <a class="nav-link" href="<?= URL::to(['/partner/default/leads'])?>">Заявки</a>
+                    <span class="nav-link-col-border"></span>
+                </div>
+                <div class="col-auto pb-3 nav-link-col">
+                    <a class="nav-link" href="<?= URL::to(['/partner/default/billing'])?>">Финансы</a>
+                    <span class="nav-link-col-border"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-auto">
+            <?= Yii::$app->user->isGuest
+                ? [
+                    'label' => Html::img(Yii::getAlias('@web/img/exit-btn.svg')),
+                    'url' => ['/site/login']
+                ]
+                : '<li class="nav-item">'
+                . Html::beginForm(['/site/logout'])
+                . Html::submitButton(
+                    Html::img(Yii::getAlias('@web/img/exit-btn.svg')),
+                    ['class' => 'nav-link btn logout']
+                )
+                . Html::endForm()
+                . '</li>'?>
+        </div>
+    </div>
 </header>
 <main id="main" class="flex-shrink-0" role="main">
     <div class="container">
