@@ -31,6 +31,7 @@ class User extends ActiveRecord implements IdentityInterface
             'updated_at' => 'Обновлён',
             'tg_login' => 'Логин в TG',
             'tg_id' => 'ID в TG',
+            'tel' => 'Телефон',
         ];
     }
 
@@ -55,6 +56,9 @@ class User extends ActiveRecord implements IdentityInterface
             [['tg_login'], 'unique'],
             [['tg_id'], 'integer'],
             [['tg_id'], 'unique'],
+            [['tel'], 'string', 'max' => 11],
+            [['tel'], 'match', 'pattern' => '/^7\\d{10}$/', 'message' => 'Телефон должен быть в формате 7XXXXXXXXXX'],
+            [['tel'], 'unique'],
         ];
     }
 
@@ -71,6 +75,15 @@ class User extends ActiveRecord implements IdentityInterface
     public static function findByUsername($username)
     {
         return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
+    }
+
+    public static function findByTel(string $tel): ?self
+    {
+        $tel = preg_replace('/\\D+/', '', $tel);
+        if (strlen($tel) === 11 && $tel[0] === '8') {
+            $tel = '7' . substr($tel, 1);
+        }
+        return static::findOne(['tel' => $tel, 'status' => self::STATUS_ACTIVE]);
     }
 
     public static function findByPasswordResetToken($token)
@@ -136,6 +149,18 @@ class User extends ActiveRecord implements IdentityInterface
     public function removePasswordResetToken()
     {
         $this->password_reset_token = null;
+    }
+
+    public function setSmsLoginCode(string $code): void
+    {
+        $this->sms_code_hash = Yii::$app->security->generatePasswordHash($code);
+        $this->sms_code_sent_at = time();
+    }
+
+    public function clearSmsLoginCode(): void
+    {
+        $this->sms_code_hash = null;
+        $this->sms_code_sent_at = null;
     }
 
     public static function getList(): array

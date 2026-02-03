@@ -10,41 +10,61 @@ use yii\base\Model;
  */
 class SignupForm extends Model
 {
-
+    public $fio;
     public $username;
-    public $email;
+    public $tel;
     public $password;
-    public $role;
-    public $tg_login;
-    public $dealer_id;
+    public $agree_rules;
+    public $role = 'user';
+
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
+            [['fio', 'username', 'tel', 'password', 'agree_rules'], 'required'],
             ['username', 'trim'],
-            ['username', 'required'],
-            ['username', 'unique', 'targetClass' => '\app\models\User', 'message' => 'This username has already been taken.'],
             ['username', 'string', 'min' => 2, 'max' => 255],
-            ['email', 'trim'],
-            ['email', 'required'],
-            ['email', 'email'],
-            ['email', 'string', 'max' => 255],
-            ['email', 'unique', 'targetClass' => '\app\models\User', 'message' => 'This email address has already been taken.'],
-            ['tg_login', 'unique', 'targetClass' => '\app\models\User', 'message' => 'Этот логин уже используется'],
-            ['dealer_id', 'required'],
-            ['dealer_id', 'integer'],
-            ['password', 'required'],
+            ['username', 'unique', 'targetClass' => '\app\models\User', 'message' => 'Это имя в системе уже занято.'],
+            ['tel', 'trim'],
+            ['tel', 'string', 'max' => 20],
+            ['tel', function ($attribute, $params, $validator) {
+                $tel = preg_replace('/\D+/', '', $this->tel);
+                if (strlen($tel) === 11 && $tel[0] === '8') {
+                    $tel = '7' . substr($tel, 1);
+                }
+                if (strlen($tel) !== 11 || $tel[0] !== '7') {
+                    $this->addError($attribute, 'Введите номер в формате +7 (999) 999-99-99');
+                    return;
+                }
+                $existing = User::findOne(['tel' => $tel]);
+                if ($existing) {
+                    $this->addError($attribute, 'Этот номер телефона уже зарегистрирован.');
+                }
+            }],
             ['password', 'string', 'min' => 6],
-            ['role', 'required'],
+            ['agree_rules', 'boolean'],
+            ['agree_rules', 'compare', 'compareValue' => true, 'message' => 'Необходимо согласие с Правилами и Условиями.'],
             ['role', 'string', 'max' => 30],
             ['role', function ($attribute, $params, $validator) {
                 if (!in_array($this->$attribute, ['user', 'manufacturer', 'provider'])) {
-                    $this->addError($attribute, 'Не хорошо пытаться взламывать чужие сайты!');
+                    $this->addError($attribute, 'Неверная роль.');
                 }
-            },  'skipOnEmpty' => false],
+            }, 'skipOnEmpty' => false],
         ];
+    }
+
+    /**
+     * Нормализует телефон до 7XXXXXXXXXX
+     */
+    public function getNormalizedTel(): string
+    {
+        $tel = preg_replace('/\D+/', '', $this->tel);
+        if (strlen($tel) === 11 && $tel[0] === '8') {
+            $tel = '7' . substr($tel, 1);
+        }
+        return $tel;
     }
 
     /**
@@ -54,28 +74,31 @@ class SignupForm extends Model
      */
     public function signup()
     {
-
         if (!$this->validate()) {
             return null;
         }
 
         $user = new User();
         $user->username = $this->username;
-        $user->email = $this->email;
+        $user->tel = $this->getNormalizedTel();
+        $user->email = $this->username . '@partner.local';
         $user->setPassword($this->password);
         $user->generateAuthKey();
-        $user->tg_login = $this->tg_login;
 
         if (!$user->save()) {
-            Yii::$app->session->setFlash('Регистрация не удалась');
+            Yii::$app->session->setFlash('danger', 'Регистрация не удалась.');
             return null;
         }
 
+        $parts = array_map('trim', preg_split('/\s+/u', $this->fio, 3, PREG_SPLIT_NO_EMPTY));
         $profile = new UserProfile();
         $profile->user_id = $user->id;
-        $profile->dealer_id = $this->dealer_id;
+        $profile->f = $parts[0] ?? null;
+        $profile->i = $parts[1] ?? null;
+        $profile->o = $parts[2] ?? null;
+        $profile->dealer_id = null;
         if (!$profile->save()) {
-            Yii::$app->session->setFlash('Не удалось создать профиль. Создайте его в настройках профиля');
+            Yii::$app->session->setFlash('warning', 'Профиль создан, но не все поля сохранены. Проверьте настройки профиля.');
         }
         return $user;
     }
@@ -83,12 +106,11 @@ class SignupForm extends Model
     public function attributeLabels()
     {
         return [
-            'username' => 'Логин',
+            'fio' => 'ФИО',
+            'username' => 'Имя в системе',
+            'tel' => 'Номер телефона',
             'password' => 'Пароль',
-            'email' => 'Email',
-            'tg_login' => 'Логин в TG без @',
-            'dealer_id' => 'Дилер',
+            'agree_rules' => 'Согласие с правилами',
         ];
     }
-
 }

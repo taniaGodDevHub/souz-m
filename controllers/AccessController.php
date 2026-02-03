@@ -24,6 +24,7 @@ class AccessController extends Controller
             && $premissionName != 'site_index'
             && $premissionName != 'site_signup'
             && $premissionName != 'site_login'
+            && $premissionName != 'site_confirm_login'
             && $premissionName != 'site_logout'
             && $premissionName != 'site_error'
             && $premissionName != 'site_contact'

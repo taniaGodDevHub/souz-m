@@ -1,3 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+*{
+    font-family: "Roboto", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: Regular;
+    font-size: 15px;
+
+}
+
 main > .container {
     padding: 70px 15px 20px;
 }
@@ -102,4 +112,43 @@ a.desc:after {
 
 .form-group {
     margin-bottom: 1rem;
+}
+
+.navbar-collapse{
+    justify-content: flex-end;
+}
+.nav-item{
+    display: flex;
+    align-items: center;
+}
+
+.site-login .card{
+    background-color: #EAECEE;
+    box-shadow: 0 -5px 5px #000;
+}
+.r-16{
+    border-radius: 16px !important;
+}
+.form-control{
+    border: none;
+}
+
+h3{
+    font-weight: 600;
+    font-style: SemiBold;
+    font-size: 24px;
+}
+
+.btn-danger{
+    border-color: #F90042;
+    color: #FFFFFF;
+    background: #F900423D;
+}
+
+.link-danger{
+    color: #F90042;
+    font-weight: 400;
+    font-style: Regular;
+    font-size: 15px;
+    text-decoration: none;
 }

@@ -33,14 +33,20 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 <header id="header">
     <?php
     NavBar::begin([
+        'brandImage' => Yii::getAlias('@web/img/logo.svg'),
         'brandLabel' => Yii::$app->name,
         'brandUrl' => Yii::$app->homeUrl,
-        'options' => ['class' => 'navbar-expand-md navbar-dark bg-dark fixed-top']
+        'options' => [
+                'class' => 'navbar-expand-md fixed-top',
+            ],
+        'innerContainerOptions' => ['class' => 'container-fluid'],
     ]);
     echo Nav::widget([
-        'options' => ['class' => 'navbar-nav'],
+        'options' => ['class' => 'navbar-nav bg-white'],
+        'encodeLabels' => false,
         'items' => [
-            ['label' => 'Главная', 'url' => ['/site/index']],
+            !Yii::$app->user->isGuest ?
+            ['label' => 'Главная', 'url' => ['/site/index']] : '',
             !Yii::$app->user->isGuest ?
                 ['label' => 'Профиль', 'url' => ['/user-profile/update', 'user_id' => Yii::$app->user->identity->id]]: '',
             Yii::$app->user->can('admin') ?
@@ -65,10 +71,11 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                 ] : '',
             !Yii::$app->user->isGuest ?
                 ['label' => 'Биллинг', 'url' => ['/billing/billing/index']] : '',
-            Yii::$app->user->isGuest ?
-                ['label' => 'Регистрация', 'url' => ['/site/signup']]  : '',
             Yii::$app->user->isGuest
-                ? ['label' => 'Войти', 'url' => ['/site/login']]
+                ? [
+                        'label' => Html::img(Yii::getAlias('@web/img/exit-btn.svg')),
+                    'url' => ['/site/login']
+                ]
                 : '<li class="nav-item">'
                     . Html::beginForm(['/site/logout'])
                     . Html::submitButton(

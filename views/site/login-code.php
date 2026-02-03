@@ -2,13 +2,13 @@
 
 /** @var yii\web\View $this */
 /** @var yii\bootstrap5\ActiveForm $form */
-
-/** @var app\models\PhoneLoginForm $model */
+/** @var app\models\SmsCodeForm $model */
+/** @var string $telMasked */
 
 use yii\bootstrap5\ActiveForm;
 use yii\bootstrap5\Html;
 
-$this->title = 'Вход';
+$this->title = 'Код из СМС';
 ?>
 <div class="site-login">
     <div class="container">
@@ -18,50 +18,40 @@ $this->title = 'Вход';
                     <div class="card-body pt-5">
                         <div class="row justify-content-center">
                             <div class="col-auto">
-                                <h3>Вход в кабинет партнера</h3>
+                                <h3>Код из СМС</h3>
                             </div>
                         </div>
                         <div class="row justify-content-center mt-3">
-                            <div class="col-auto">
-                                Введите номер телефона чтобы войти
+                            <div class="col-md-10 text-center">
+                                Мы отправили одноразовый код на <?= Html::encode($telMasked) ?>.<br>
+                                Введите его в поле ниже.
                             </div>
                         </div>
                         <div class="row justify-content-center mt-3">
                             <div class="col-md-8">
                                 <?php $form = ActiveForm::begin([
-                                    'id' => 'login-form',
+                                    'id' => 'sms-code-form',
                                     'fieldConfig' => [
                                         'template' => "{label}\n{input}\n{error}",
                                         'errorOptions' => ['class' => 'col-lg-7 invalid-feedback'],
                                     ],
                                 ]); ?>
 
-                                <?= $form->field($model, 'tel')->textInput([
+                                <?= $form->field($model, 'code')->textInput([
                                     'autofocus' => true,
                                     'class' => 'mt-3 form-control',
-                                    'id' => 'tel-input',
+                                    'id' => 'sms-code-input',
+                                    'inputmode' => 'numeric',
+                                    'maxlength' => 6,
                                 ])->label(false) ?>
-
 
                                 <div class="form-group">
                                     <div>
-                                        <?= Html::submitButton('Продолжить', ['class' => 'btn btn-danger', 'name' => 'login-button']) ?>
+                                        <?= Html::submitButton('Подтвердить', ['class' => 'btn btn-danger', 'name' => 'confirm-button']) ?>
                                     </div>
                                 </div>
 
                                 <?php ActiveForm::end(); ?>
-                            </div>
-                        </div>
-                        <div class="row justify-content-center">
-                            <div class="col-md-8">
-                                <div class="row justify-content-start">
-                                    <div class="col-md-auto">
-                                        <?= Html::a('Не помню пароль', ['site/request-password-reset'], ['class' => 'link-danger']) ?>
-                                    </div>
-                                    <div class="col-md-auto">
-                                        <?= Html::a('Зарегистрироваться', ['site/signup'], ['class' => 'link-danger']) ?>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -72,12 +62,17 @@ $this->title = 'Вход';
 </div>
 
 <?php
-// Inputmask через CDN (jQuery есть в YiiAsset)
-$this->registerJsFile('https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.8/jquery.inputmask.min.js', [
-    'depends' => [\yii\web\YiiAsset::class],
-]);
 $this->registerJs(<<<JS
-    $('#tel-input').inputmask('+7 (999) 999-99-99');
+    const input = document.getElementById('sms-code-input');
+    if (input) {
+      input.addEventListener('input', function() {
+        this.value = this.value.replace(/\\D+/g, '').slice(0, 6);
+        if (this.value.length === 6) {
+          const form = document.getElementById('sms-code-form');
+          if (form) form.submit();
+        }
+      });
+    }
 JS);
 ?>
 
