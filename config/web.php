@@ -6,7 +6,7 @@ $aliases = require __DIR__ . '/aliases.php';
 
 $config = [
     'id' => 'basic',
-    'name' => 'crm.avarcom',
+    'name' => 'crm.souz-m',
     'language' => 'ru-RU',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],

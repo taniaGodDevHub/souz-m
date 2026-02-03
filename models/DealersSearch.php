@@ -1,15 +1,15 @@
 <?php
 
-namespace app\modules\users\models;
+namespace app\models;
 
+use app\models\Dealers;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\User;
 
 /**
- * UserSearch represents the model behind the search form of `app\models\User`.
+ * DealersSearch represents the model behind the search form of `app\models\Dealers`.
  */
-class UserSearch extends User
+class DealersSearch extends Dealers
 {
     /**
      * {@inheritdoc}
@@ -17,8 +17,8 @@ class UserSearch extends User
     public function rules()
     {
         return [
-            [['id', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['username', 'auth_key', 'password_hash', 'password_reset_token', 'email'], 'safe'],
+            [['id', 'city_id'], 'integer'],
+            [['name', 'address', 'phone', 'email'], 'safe'],
         ];
     }
 
@@ -35,13 +35,13 @@ class UserSearch extends User
      * Creates data provider instance with search query applied
      *
      * @param array $params
+     * @param string|null $formName Form name to be used into `->load()` method.
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $formName = null)
     {
-        $query = User::find()
-            ->with(['profile.dealer.city']);
+        $query = Dealers::find();
 
         // add conditions that should always apply here
 
@@ -52,7 +52,7 @@ class UserSearch extends User
             ],
         ]);
 
-        $this->load($params);
+        $this->load($params, $formName);
 
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
@@ -63,17 +63,15 @@ class UserSearch extends User
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'status' => $this->status,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'city_id' => $this->city_id,
         ]);
 
-        $query->andFilterWhere(['like', 'username', $this->username])
-            ->andFilterWhere(['like', 'auth_key', $this->auth_key])
-            ->andFilterWhere(['like', 'password_hash', $this->password_hash])
-            ->andFilterWhere(['like', 'password_reset_token', $this->password_reset_token])
+        $query->andFilterWhere(['like', 'name', $this->name])
+            ->andFilterWhere(['like', 'address', $this->address])
+            ->andFilterWhere(['like', 'phone', $this->phone])
             ->andFilterWhere(['like', 'email', $this->email]);
 
         return $dataProvider;
     }
 }
+

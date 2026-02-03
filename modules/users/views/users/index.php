@@ -25,6 +25,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= GridView::widget([
                             'dataProvider' => $dataProvider,
                             'filterModel' => $searchModel,
+                            'pager' => [
+                                'class' => \yii\bootstrap5\LinkPager::class,
+                            ],
                             'columns' => [
                                 ['class' => 'yii\grid\SerialColumn'],
 
@@ -34,6 +37,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                 //'password_hash',
                                 //'password_reset_token',
                                 'email:email',
+                                [
+                                    'label' => 'Город',
+                                    'content' => function ($model) {
+                                        if (!empty($model->profile) && !empty($model->profile->dealer) && !empty($model->profile->dealer->city)) {
+                                            return $model->profile->dealer->city->name;
+                                        }
+                                        return 'Нет данных';
+                                    }
+                                ],
                                 [
 
                                     'attribute' => 'status',
