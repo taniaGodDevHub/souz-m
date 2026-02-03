@@ -100,16 +100,16 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
     </div>
 </main>
 
-<footer id="footer" class="mt-auto py-3 bg-light">
+<!--<footer id="footer" class="mt-auto py-3 bg-light">
     <div class="container">
         <div class="row text-muted">
-            <div class="col-md-6 text-center text-md-start">Avarcom  <?= date('Y') ?></div>
+            <div class="col-md-6 text-center text-md-start">Avarcom  <?php /*= date('Y') */?></div>
             <div class="col-md-6 text-center text-md-end">
                 Developed with
                 <i id="devHeart" class="bi bi-heart-fill"></i> by PerfectTeam</div>
         </div>
     </div>
-</footer>
+</footer>-->
 
 <?php $this->endBody() ?>
 </body>

@@ -13,14 +13,21 @@ class AccessController extends Controller
 
         $premissionName = str_replace(['/', '-'], '_', $action->uniqueId);
 
+        // Доступ к личным кабинетам по роли
+        $cabinetPermissions = [
+            'partner_default_index' => 'partner',
+            'advertiser_default_index' => 'advertiser',
+            'manager_default_index' => 'manager',
+            'admin_default_index' => 'admin',
+        ];
+        if (isset($cabinetPermissions[$premissionName]) && !\Yii::$app->user->isGuest) {
+            if (\Yii::$app->user->can($cabinetPermissions[$premissionName])) {
+                return parent::beforeAction($action);
+            }
+        }
+
         if (!\Yii::$app->user->can($premissionName)
-            && $premissionName != 'data_get_products'
-            && $premissionName != 'tg_index'
-            && $premissionName != 'data_set_order'
-            && $premissionName != 'data_get_city'
-            && $premissionName != 'data_get_dealer_by_city_id'
-            && $premissionName != 'order_new_order'
-            && $premissionName != 'dealers_search_cities'
+            && $premissionName != 'site_request_password_reset'
             && $premissionName != 'site_index'
             && $premissionName != 'site_signup'
             && $premissionName != 'site_login'

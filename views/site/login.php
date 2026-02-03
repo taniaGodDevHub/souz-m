@@ -15,7 +15,7 @@ $this->title = 'Вход';
         <div class="row justify-content-center mt-5">
             <div class="col-12 col-md-5 ">
                 <div class="card r-16">
-                    <div class="card-body pt-5">
+                    <div class="card-body pt-5 pb-5">
                         <div class="row justify-content-center">
                             <div class="col-auto">
                                 <h3>Вход в кабинет партнера</h3>
@@ -55,9 +55,6 @@ $this->title = 'Вход';
                         <div class="row justify-content-center">
                             <div class="col-md-8">
                                 <div class="row justify-content-start">
-                                    <div class="col-md-auto">
-                                        <?= Html::a('Не помню пароль', ['site/request-password-reset'], ['class' => 'link-danger']) ?>
-                                    </div>
                                     <div class="col-md-auto">
                                         <?= Html::a('Зарегистрироваться', ['site/signup'], ['class' => 'link-danger']) ?>
                                     </div>

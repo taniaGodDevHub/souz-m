@@ -103,6 +103,18 @@ $config = [
         'cars' => [
             'class' => 'app\modules\cars\Cars',
         ],
+        'partner' => [
+            'class' => 'app\modules\partner\Partner',
+        ],
+        'advertiser' => [
+            'class' => 'app\modules\advertiser\Advertiser',
+        ],
+        'manager' => [
+            'class' => 'app\modules\manager\Manager',
+        ],
+        'admin' => [
+            'class' => 'app\modules\admin\Admin',
+        ],
     ],
     'params' => $params,
 ];

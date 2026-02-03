@@ -15,7 +15,7 @@ class SignupForm extends Model
     public $tel;
     public $password;
     public $agree_rules;
-    public $role = 'user';
+    public $role = 'partner';
 
     /**
      * @inheritdoc
@@ -48,7 +48,7 @@ class SignupForm extends Model
             ['agree_rules', 'compare', 'compareValue' => true, 'message' => 'Необходимо согласие с Правилами и Условиями.'],
             ['role', 'string', 'max' => 30],
             ['role', function ($attribute, $params, $validator) {
-                if (!in_array($this->$attribute, ['user', 'manufacturer', 'provider'])) {
+                if (!in_array($this->$attribute, ['partner', 'advertiser', 'manager'])) {
                     $this->addError($attribute, 'Неверная роль.');
                 }
             }, 'skipOnEmpty' => false],

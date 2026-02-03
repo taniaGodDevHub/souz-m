@@ -11,6 +11,7 @@ use app\models\ResetPasswordForm;
 use app\models\SmsCodeForm;
 use app\models\SignupForm;
 use app\models\User;
+use app\helpers\CabinetHelper;
 use app\services\Sms;
 use Yii;
 use yii\base\InvalidParamException;
@@ -158,7 +159,7 @@ class SiteController extends AccessController
             Yii::$app->session->remove('login.tel');
 
             Yii::$app->user->login($user, 3600 * 24 * 30);
-            return $this->goBack();
+            return $this->redirect(CabinetHelper::getDefaultUrlForUser($user->id));
         }
 
         return $this->render('login-code', [
@@ -227,23 +228,15 @@ class SiteController extends AccessController
 
         if ($model->load(Yii::$app->request->post())) {
             if ($user = $model->signup()) {
-                if (Yii::$app->getUser()->login($user)) {
-
-
-                    $assignment = new AuthAssignment();
-                    $assignment->item_name = 'partner';
-                    $assignment->user_id = (STRING)Yii::$app->user->identity->id;
-
-
-                    Yii::$app->session->setFlash("info", "Регистрация завершена.");
-
-                    if(!$assignment->save()){
-                        Yii::$app->session->setFlash("danger", "Не удалось установить права для вашей учётной записи. Свяжитесь с технической поддержкой." . print_r($assignment->getErrors(), true));
-                    }
-                    return $this->goHome();
-                }else{
-                    Yii::$app->session->setFlash("info", "Вы уже авторизованы в системе.");
+                $assignment = new AuthAssignment();
+                $assignment->item_name = $model->role;
+                $assignment->user_id = (string) $user->id;
+                if (!$assignment->save()) {
+                    Yii::$app->session->setFlash('danger', 'Не удалось установить права. Свяжитесь с технической поддержкой.');
+                } else {
+                    Yii::$app->session->setFlash('success', 'Регистрация завершена. Войдите в систему.');
                 }
+                return $this->redirect(['site/login']);
             }
         }
 
