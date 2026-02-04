@@ -118,6 +118,9 @@ $config = [
         'devLogin' => [
             'class' => 'app\modules\devLogin\DevLogin',
         ],
+        'stat' => [
+            'class' => 'app\modules\stat\Stat',
+        ],
     ],
     'params' => $params,
 ];

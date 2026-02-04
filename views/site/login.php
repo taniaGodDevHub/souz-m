@@ -14,7 +14,7 @@ $this->title = 'Вход';
     <div class="container">
         <div class="row justify-content-center mt-5">
             <div class="col-12 col-md-5 ">
-                <div class="card r-16">
+                <div class="card card-grey card-shadow r-16">
                     <div class="card-body pt-5 pb-5">
                         <div class="row justify-content-center">
                             <div class="col-auto">
@@ -77,4 +77,3 @@ $this->registerJs(<<<JS
     $('#tel-input').inputmask('+7 (999) 999-99-99');
 JS);
 ?>
-

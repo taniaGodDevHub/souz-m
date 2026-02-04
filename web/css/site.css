@@ -125,11 +125,29 @@ a.desc:after {
 }
 
 .card{
-    background-color: #EAECEE;
+
+}
+.card-shadow{
     box-shadow: 0 -5px 5px #000;
 }
+.card-grey{
+    background-color: #EAECEE;
+    border: none;
+}
+.card-white{
+    background-color: #FFFFFF;
+    border: none;
+}
+.card-black{
+    background-color: #100E19;
+    border: none;
+}
+
 .r-16{
     border-radius: 16px !important;
+}
+.r-50-p{
+    border-radius: 50% !important;
 }
 .form-control{
     border: none;
@@ -139,6 +157,11 @@ h3{
     font-weight: 600;
     font-style: SemiBold;
     font-size: 24px;
+}
+
+h3>*{
+    font-weight: 600 !important;
+    font-size: 24px !important;
 }
 
 .btn-danger{
@@ -200,4 +223,12 @@ h3{
     height: 3px;
     width: 100%;
     background-color: #F90042;
+}
+.bg-secondary{
+    background-color: #D9D9D9 !important;
+}
+
+.text-normal{
+    color: #000000 !important;
+    font-weight: 400 !important;
 }
