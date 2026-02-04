@@ -5,6 +5,7 @@ namespace app\modules\cars\models;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "car_model".
@@ -80,6 +81,23 @@ class CarModel extends ActiveRecord
     public function getMark()
     {
         return $this->hasOne(CarMark::className(), ['id' => 'mark_id']);
+    }
+
+    /**
+     * Список моделей по ID марки для выпадающего списка.
+     * @param int|null $markId
+     * @return array
+     */
+    public static function getListByMarkId($markId)
+    {
+        if ($markId === null || $markId === '') {
+            return [];
+        }
+        return ArrayHelper::map(
+            self::find()->where(['mark_id' => (int) $markId])->orderBy('name')->all(),
+            'id',
+            'name'
+        );
     }
 }
 

@@ -9,7 +9,6 @@ $this->title = 'Кабинет партнёра';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="partner-default-index">
-
     <div class="row">
         <div class="col-12">
             <h1>Здравствуйте, <?= Yii::$app->user->identity->username?> 🖐</h1>
