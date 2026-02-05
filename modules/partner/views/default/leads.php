@@ -211,6 +211,19 @@ $searchClientUrl = \yii\helpers\Url::to(['/partner/default/search-client']);
                                             ]);?>
                                         </div>
                                     </div>
+
+                                    <div class="row">
+                                        <div class="col-12 client-autocomplete-wrap">
+                                            <?= UploadWidget::widget([
+                                                'title' => 'PDF - файлы (например, европротокол, пояснения) ',
+                                                'fileTypes' => 'pdf',
+                                                'accept' => '.pdf',
+                                                'mode' => 'both',
+                                                'name' => 'pdf',
+                                                'isImage' => false,
+                                            ]);?>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -239,9 +252,9 @@ $searchClientUrl = \yii\helpers\Url::to(['/partner/default/search-client']);
 
 
 
-                <div class="modal-footer px-0 pb-0">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
-                    <?= Html::submitButton('Создать', ['class' => 'btn btn-primary']) ?>
+                <div class="modal-footer justify-content-start">
+                    <?= Html::submitButton('Отправить', ['class' => 'btn btn-danger']) ?>
+                    <button type="button" class="btn btn-black" data-bs-dismiss="modal">Отменить</button>
                 </div>
                 <?php ActiveForm::end(); ?>
             </div>
