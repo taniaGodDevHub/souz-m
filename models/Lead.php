@@ -23,6 +23,7 @@ use yii\behaviors\TimestampBehavior;
  * @property int|null $partner_id
  * @property int|null $car_mark_id
  * @property int|null $car_model_id
+ * @property string|null $profit
  *
  * @property City $city
  * @property InsuranceCompany $insuranceCompany
@@ -54,6 +55,7 @@ class Lead extends ActiveRecord
     {
         return [
             [['dtp_date', 'city_id', 'insurance_company_id', 'client_id', 'date_add', 'status_id', 'partner_id', 'car_mark_id', 'car_model_id'], 'integer'],
+            [['profit'], 'number'],
             [['report'], 'string'],
             [['car_number'], 'string', 'max' => 50],
             [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => City::class, 'targetAttribute' => ['city_id' => 'id']],
@@ -81,6 +83,7 @@ class Lead extends ActiveRecord
             'partner_id' => 'Партнёр',
             'car_mark_id' => 'Марка авто',
             'car_model_id' => 'Модель авто',
+            'profit' => 'Профит',
         ];
     }
 
@@ -132,4 +135,5 @@ class Lead extends ActiveRecord
     {
         return $this->hasMany(LeadStatusHistory::class, ['lead_id' => 'id'])->orderBy(['date_add' => SORT_ASC])->with('status');
     }
+
 }
