@@ -14,4 +14,10 @@ class Files extends \yii\base\Module
 
     /** @var string URL папки загрузок для доступа по HTTP */
     public $uploadUrl = '@web/uploads';
+
+    /** @var int Максимум файлов за один запрос (по умолчанию 20) */
+    public $maxFiles = 20;
+
+    /** @var int Максимальный размер одного файла в МБ (по умолчанию 20) */
+    public $maxFileSizeMb = 20;
 }

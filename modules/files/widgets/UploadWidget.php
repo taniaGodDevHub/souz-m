@@ -18,7 +18,7 @@ use yii\helpers\Url;
  * - maxFileSizeMb: максимум размер одного файла в МБ (по умолчанию 20)
  * - uploadUrl: URL экшена загрузки
  * - name: имя для скрытых полей (массив путей загруженных файлов)
- * - slotCount: количество слотов-клеток (по умолчанию 10)
+ * - slotCount: количество слотов-клеток (по умолчанию 6)
  * - isImage: true для превью картинок (камера+), false для PDF/других (плюс)
  *
  * Использование:
@@ -51,8 +51,8 @@ class UploadWidget extends Widget
     public $uploadUrl;
     /** @var string Имя для скрытых полей (передаётся массив path) */
     public $name = 'files';
-    /** @var int Количество слотов в сетке */
-    public $slotCount = 10;
+    /** @var int Количество слотов в сетке (по умолчанию 6) */
+    public $slotCount = 6;
     /** @var bool true — превью как картинки, иконка камера+; false — иконка плюс */
     public $isImage = true;
 

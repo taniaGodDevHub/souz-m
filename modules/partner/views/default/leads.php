@@ -1,9 +1,11 @@
 <?php
 /** @var yii\web\View $this */
 /** @var app\models\LeadForm $leadForm */
+
 /** @var bool $openLeadModal */
 
 use app\modules\billing\widgets\BalanceWidget;
+use app\modules\files\widgets\UploadWidget;
 use app\modules\partner\widgets\ArticleWidget;
 use app\modules\insurance_companies\models\InsuranceCompany;
 use app\modules\cars\models\CarMark;
@@ -22,42 +24,44 @@ $openLeadModal = $openLeadModal ?? false;
 $carModelsUrl = \yii\helpers\Url::to(['/partner/default/car-models']);
 $searchClientUrl = \yii\helpers\Url::to(['/partner/default/search-client']);
 ?>
-<div class="partner-default-leads">
-    <div class="row">
-        <div class="col-12">
-            <h1>Здравствуйте, <?= Yii::$app->user->identity->username?> 🖐</h1>
-        </div>
-        <div class="col-12 mt-5">
-            <?=  BalanceWidget::widget([
-                'userId' => Yii::$app->user->identity->id,
-                'walletUrl' => ['/billing/billing/index'],
-            ]);?>
-        </div>
-        <div class="col-12 mt-5">
-            <div class="card card-transparent r-16">
-                <div class="card-body p-5">
-                    <div class="row flex-column justify-content-center align-items-center">
-                        <div class="col-auto mt-4">
-                            <h3>Вы ещё не создали ни одной заявки 😎</h3>
-                        </div>
-                        <div class="col-auto">Создайте первую заявку</div>
-                        <div class="col-auto mt-4">
-                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#leadModal">
-                                Создать заявку
-                            </button>
+    <div class="partner-default-leads">
+        <div class="row">
+            <div class="col-12">
+                <h1>Здравствуйте, <?= Yii::$app->user->identity->username ?> 🖐</h1>
+            </div>
+            <div class="col-12 mt-5">
+                <?= BalanceWidget::widget([
+                    'userId' => Yii::$app->user->identity->id,
+                    'walletUrl' => ['/billing/billing/index'],
+                ]); ?>
+            </div>
+            <div class="col-12 mt-5">
+                <div class="card card-transparent r-16">
+                    <div class="card-body p-5">
+                        <div class="row flex-column justify-content-center align-items-center">
+                            <div class="col-auto mt-4">
+                                <h3>Вы ещё не создали ни одной заявки 😎</h3>
+                            </div>
+                            <div class="col-auto">Создайте первую заявку</div>
+                            <div class="col-auto mt-4">
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                        data-bs-target="#leadModal">
+                                    Создать заявку
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
+
+
             </div>
-
-
-        </div>
-        <div class="col-12 mt-5">
-            <?= ArticleWidget::widget([]); ?>
+            <div class="col-12 mt-5">
+                <?= ArticleWidget::widget([]); ?>
+            </div>
         </div>
     </div>
-</div>
-<div class="modal fade" id="leadModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="leadModalLabel" aria-hidden="true">
+    <div class="modal fade" id="leadModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+         aria-labelledby="leadModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content r-16">
                 <div class="modal-header">
@@ -88,12 +92,12 @@ $searchClientUrl = \yii\helpers\Url::to(['/partner/default/search-client']);
                                         <div class="col-12 col-md-4">
                                             <?= $form->field($leadForm, 'dtp_date')
                                                 ->textInput(['type' => 'date', 'placeholder' => 'Дата совершения ДТП'])
-                                                ->label(false)?>
+                                                ->label(false) ?>
                                         </div>
                                         <div class="col-12 col-md-4">
                                             <?= $form->field($leadForm, 'dtp_time')
                                                 ->textInput(['type' => 'time', 'placeholder' => 'Время совершения ДТП'])
-                                                ->label(false)?>
+                                                ->label(false) ?>
                                         </div>
                                         <div class="col-12 col-md-4">
                                             <?= $form->field($leadForm, 'city_id')->dropDownList($cityList, ['prompt' => 'Город совершения ДТП'])->label(false) ?>
@@ -103,7 +107,7 @@ $searchClientUrl = \yii\helpers\Url::to(['/partner/default/search-client']);
                                         <div class="col-6">
                                             <?= $form->field($leadForm, 'insurance_company_id')
                                                 ->dropDownList($insuranceList, ['prompt' => 'Страховая компания потерпевшего'])
-                                                ->label(false)?>
+                                                ->label(false) ?>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -151,7 +155,8 @@ $searchClientUrl = \yii\helpers\Url::to(['/partner/default/search-client']);
                                                 'id' => 'leadform-f',
                                                 'autocomplete' => 'off',
                                             ])->label(false) ?>
-                                            <div class="client-autocomplete-list" data-for="f" style="display:none;"></div>
+                                            <div class="client-autocomplete-list" data-for="f"
+                                                 style="display:none;"></div>
                                         </div>
                                         <div class="col-12 col-md-6 client-autocomplete-wrap">
                                             <?= $form->field($leadForm, 'i')->textInput([
@@ -159,7 +164,8 @@ $searchClientUrl = \yii\helpers\Url::to(['/partner/default/search-client']);
                                                 'id' => 'leadform-i',
                                                 'autocomplete' => 'off',
                                             ])->label(false) ?>
-                                            <div class="client-autocomplete-list" data-for="i" style="display:none;"></div>
+                                            <div class="client-autocomplete-list" data-for="i"
+                                                 style="display:none;"></div>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -176,13 +182,14 @@ $searchClientUrl = \yii\helpers\Url::to(['/partner/default/search-client']);
                                                 'id' => 'leadform-tel',
                                                 'autocomplete' => 'off',
                                             ])->label(false) ?>
-                                            <div class="client-autocomplete-list" data-for="tel" style="display:none;"></div>
+                                            <div class="client-autocomplete-list" data-for="tel"
+                                                 style="display:none;"></div>
                                         </div>
-                                    </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
                     <div class="row mt-5">
                         <div class="col-12">
                             <div class="card card-shadow card-grey r-16 p-5">
@@ -192,63 +199,39 @@ $searchClientUrl = \yii\helpers\Url::to(['/partner/default/search-client']);
                                             <h3>Материалы (файлы)</h3>
                                         </div>
                                     </div>
-                                    <?= Html::activeHiddenInput($leadForm, 'client_id', ['id' => 'leadform-client_id']) ?>
                                     <div class="row">
-                                        <div class="col-12 col-md-6 client-autocomplete-wrap">
-                                            <?= $form->field($leadForm, 'f')->textInput([
-                                                'placeholder' => 'Фамилия',
-                                                'id' => 'leadform-f',
-                                                'autocomplete' => 'off',
-                                            ])->label(false) ?>
-                                            <div class="client-autocomplete-list" data-for="f" style="display:none;"></div>
+                                        <div class="col-12 client-autocomplete-wrap">
+                                            <?= UploadWidget::widget([
+                                            'title' => 'Фотографии с места ДТП',
+                                            'fileTypes' => 'jpg/png',
+                                            'accept' => '.jpg,.jpeg,.png',
+                                            'mode' => 'both',
+                                            'name' => 'photos',
+                                            'isImage' => true,
+                                            ]);?>
                                         </div>
-                                        <div class="col-12 col-md-6 client-autocomplete-wrap">
-                                            <?= $form->field($leadForm, 'i')->textInput([
-                                                'placeholder' => 'Имя',
-                                                'id' => 'leadform-i',
-                                                'autocomplete' => 'off',
-                                            ])->label(false) ?>
-                                            <div class="client-autocomplete-list" data-for="i" style="display:none;"></div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-12 col-md-6">
-                                            <?= $form->field($leadForm, 'o')->textInput([
-                                                'placeholder' => 'Отчество',
-                                                'id' => 'leadform-o',
-                                                'autocomplete' => 'off',
-                                            ])->label(false) ?>
-                                        </div>
-                                        <div class="col-12 col-md-6 client-autocomplete-wrap">
-                                            <?= $form->field($leadForm, 'tel')->textInput([
-                                                'placeholder' => '+7 (999) 999-99-99',
-                                                'id' => 'leadform-tel',
-                                                'autocomplete' => 'off',
-                                            ])->label(false) ?>
-                                            <div class="client-autocomplete-list" data-for="tel" style="display:none;"></div>
-                                        </div>
-                                    </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <?= $form->field($leadForm, 'status_id')->dropDownList($statusList, ['prompt' => 'Выберите статус']) ?>
-                        </div>
-                    </div>
-                    <?= $form->field($leadForm, 'report')->textarea(['rows' => 4, 'placeholder' => 'Отчёт партнёра']) ?>
-
-                    <div class="modal-footer px-0 pb-0">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
-                        <?= Html::submitButton('Создать', ['class' => 'btn btn-primary']) ?>
-                    </div>
-                    <?php ActiveForm::end(); ?>
                 </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $form->field($leadForm, 'status_id')->dropDownList($statusList, ['prompt' => 'Выберите статус']) ?>
+                    </div>
+                </div>
+                <?= $form->field($leadForm, 'report')->textarea(['rows' => 4, 'placeholder' => 'Отчёт партнёра']) ?>
+
+                <div class="modal-footer px-0 pb-0">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <?= Html::submitButton('Создать', ['class' => 'btn btn-primary']) ?>
+                </div>
+                <?php ActiveForm::end(); ?>
             </div>
         </div>
+    </div>
     </div>
 
 <?php
@@ -258,7 +241,7 @@ $this->registerJs(<<<JS
     var modelSelect = document.getElementById('leadform-car_model_id');
     var carModelsUrl = 
 JS
-. \yii\helpers\Json::encode($carModelsUrl) . <<<JS
+    . \yii\helpers\Json::encode($carModelsUrl) . <<<JS
 ;
     if (!markSelect || !modelSelect) return;
     var promptText = modelSelect.options[0] ? modelSelect.options[0].text : 'Модель автомобиля';
@@ -290,7 +273,7 @@ JS
     updateCarModels();
 })();
 JS
-, \yii\web\View::POS_READY);
+    , \yii\web\View::POS_READY);
 if ($openLeadModal) {
     $this->registerJs(<<<JS
         (function(){
@@ -343,7 +326,7 @@ $this->registerJs(<<<'JS'
     });
 })();
 JS
-, \yii\web\View::POS_READY);
+    , \yii\web\View::POS_READY);
 
 $this->registerCss(<<<CSS
 .client-autocomplete-wrap { position: relative; }
@@ -444,4 +427,4 @@ $this->registerJs(<<<'JS'
     attach('tel');
 })();
 JS
-, \yii\web\View::POS_READY);
+    , \yii\web\View::POS_READY);

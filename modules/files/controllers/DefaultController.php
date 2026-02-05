@@ -12,11 +12,9 @@ use yii\web\UploadedFile;
  */
 class DefaultController extends AccessController
 {
-    /** @var int Максимальный размер файла (20 МБ) */
-    public $maxFileSize = 20971520;
-
     /**
      * Принимает загруженные файлы, сохраняет в web/uploads, возвращает JSON.
+     * Ограничения берутся из модуля: maxFiles, maxFileSizeMb.
      */
     public function actionUpload()
     {
@@ -39,6 +37,13 @@ class DefaultController extends AccessController
             return ['success' => false, 'error' => 'Нет файлов'];
         }
 
+        $maxFiles = (int) ($this->module->maxFiles ?? 20);
+        $maxFileSizeBytes = (int) (($this->module->maxFileSizeMb ?? 20) * 1024 * 1024);
+
+        if (count($files) > $maxFiles) {
+            return ['success' => false, 'error' => 'Превышено максимальное количество файлов: ' . $maxFiles];
+        }
+
         $basePath = Yii::getAlias($this->module->uploadPath);
         if (!is_dir($basePath)) {
             mkdir($basePath, 0755, true);
@@ -53,7 +58,7 @@ class DefaultController extends AccessController
         $saved = [];
 
         foreach ($files as $file) {
-            if ($file->size > $this->maxFileSize) {
+            if ($file->size > $maxFileSizeBytes) {
                 continue;
             }
             $name = $file->name;

@@ -22,22 +22,26 @@ $headerText = $fileTypes !== '' ? $title . ' (' . $fileTypes . ')' : $title;
 ?>
 <div class="files-upload-widget" id="<?= Html::encode($id) ?>" data-upload-url="<?= Html::encode($uploadUrl) ?>" data-accept="<?= Html::encode($accept) ?>" data-max-files="<?= (int) $maxFiles ?>" data-max-bytes="<?= (int) $maxFileSizeBytes ?>" data-name="<?= Html::encode($name) ?>" data-is-image="<?= $isImage ? '1' : '0' ?>" data-mode="<?= Html::encode($mode) ?>">
     <div class="files-upload-header d-flex justify-content-between align-items-center flex-wrap gap-2">
-        <h4 class="files-upload-title mb-0"><?= Html::encode($headerText) ?></h4>
+        <div class="files-upload-title mb-0"><?= Html::encode($headerText) ?></div>
         <?php if ($showMulti): ?>
             <button type="button" class="btn btn-secondary files-upload-multi-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/><path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"/></svg>
-                Мультизагрузка
+                <img src="<?= Yii::getAlias('@web/img/download.svg')?>" alt="">
+                    Мультизагрузка
             </button>
         <?php endif; ?>
     </div>
-    <div class="files-upload-grid">
+    <div class="files-upload-grid row mt-3">
         <?php for ($i = 0; $i < $slotCount; $i++): ?>
-            <div class="files-upload-slot" data-slot="<?= $i ?>">
-                <div class="files-upload-slot-inner files-upload-slot-empty">
+            <div class="files-upload-slot col-4 col-md-2 mb-3" data-slot="<?= $i ?>">
+                <div class="files-upload-slot-inner files-upload-slot-empty bg-white r-16">
                     <?php if ($isImage): ?>
-                        <span class="files-upload-icon files-upload-icon-camera">📷+</span>
+                        <span class="files-upload-icon files-upload-icon-camera">
+                            <img src="<?= Yii::getAlias('@web/img/photo-plus.svg')?>" alt="">
+                        </span>
                     <?php else: ?>
-                        <span class="files-upload-icon files-upload-icon-plus">+</span>
+                        <span class="files-upload-icon files-upload-icon-plus">
+                            <img src="<?= Yii::getAlias('@web/img/plus.svg')?>" alt="">
+                        </span>
                     <?php endif; ?>
                 </div>
             </div>
@@ -51,16 +55,13 @@ $headerText = $fileTypes !== '' ? $title . ' (' . $fileTypes . ')' : $title;
 <?php
 $widgetId = $id;
 $css = <<<CSS
-.files-upload-widget { margin-bottom: 1rem; }
-.files-upload-header { margin-bottom: 0.75rem; }
-.files-upload-title { font-size: 1.1rem; font-weight: 600; }
-.files-upload-multi-btn { display: inline-flex; align-items: center; gap: 0.35rem; border-radius: 8px; }
-.files-upload-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.5rem; }
-@media (min-width: 768px) { .files-upload-grid { grid-template-columns: repeat(10, 1fr); } }
-.files-upload-slot { aspect-ratio: 1; min-height: 70px; }
+.files-upload-multi-btn { display: inline-flex; align-items: center; gap: 0.35rem; border-radius: 1.5rem; }
+.files-upload-grid {}
+@media (min-width: 768px) { .files-upload-grid {  } }
+.files-upload-slot {}
 .files-upload-slot-inner { width: 100%; height: 100%; border: 1px solid #dee2e6; border-radius: 8px; background: #e9ecef; display: flex; align-items: center; justify-content: center; cursor: pointer; overflow: hidden; }
 .files-upload-slot-inner:hover { background: #dee2e6; }
-.files-upload-slot-empty .files-upload-icon { color: #495057; font-size: 1.5rem; }
+.files-upload-slot-empty .files-upload-icon { color: #495057; font-size: 1.5rem; padding-bottom: 3rem; padding-top: 3rem; }
 .files-upload-slot-inner img { width: 100%; height: 100%; object-fit: cover; }
 .files-upload-hidden-container { display: none; }
 CSS;
@@ -120,7 +121,14 @@ $this->registerJs(<<<JS
                 inner.style.cursor = 'default';
             } else {
                 inner.classList.add('files-upload-slot-empty');
-                inner.innerHTML = isImage ? '<span class="files-upload-icon files-upload-icon-camera">📷+</span>' : '<span class="files-upload-icon files-upload-icon-plus">+</span>';
+                inner.innerHTML = isImage ? `<span class="files-upload-icon files-upload-icon-camera"><svg width="23" height="21" viewBox="0 0 23 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M17.75 5C19.5449 5 21 6.45507 21 8.25V9.5C21 10.6046 20.1046 11.5 19 11.5H18.25C17.6028 11.5 17.0709 11.9918 17.0068 12.6221L16.9932 12.8779C16.9291 13.5082 16.3972 14 15.75 14H15.5C14.6716 14 14 14.6716 14 15.5V16.5C14 17.8807 12.8807 19 11.5 19H5C2.79086 19 1 17.2091 1 15V9C1 6.79086 2.79086 5 5 5H17.75ZM11 9C9.34315 9 8 10.3431 8 12C8 13.6569 9.34315 15 11 15C12.6569 15 14 13.6569 14 12C14 10.3431 12.6569 9 11 9ZM12.9297 1C13.5984 1.00002 14.2228 1.33424 14.5938 1.89062L15.667 3.5H6.33301L7.40625 1.89062C7.77717 1.33424 8.40163 1.00002 9.07031 1H12.9297Z" fill="#28303F"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M18.8906 12.3107C19.3048 12.3107 19.6406 12.6464 19.6406 13.0607L19.6406 15.1391L21.7191 15.1391C22.1333 15.1391 22.4691 15.4749 22.4691 15.8891C22.4691 16.3033 22.1333 16.6391 21.7191 16.6391L19.6406 16.6391V18.7175C19.6406 19.1317 19.3048 19.4675 18.8906 19.4675C18.4764 19.4675 18.1406 19.1317 18.1406 18.7175V16.6391L16.0622 16.6391C15.648 16.6391 15.3122 16.3033 15.3122 15.8891C15.3122 15.4749 15.648 15.1391 16.0622 15.1391L18.1406 15.1391L18.1406 13.0607C18.1406 12.6464 18.4764 12.3107 18.8906 12.3107Z" fill="#28303F"/>
+</svg>
+</span>` : `<span class="files-upload-icon files-upload-icon-plus"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M4 12H20M12 4V20" stroke="#6E6B7C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+</span>`;
                 inner.style.cursor = 'pointer';
             }
         });
