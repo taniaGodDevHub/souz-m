@@ -28,11 +28,22 @@ class DefaultController extends AccessController
     public function actionCreateLead()
     {
         $leadForm = new LeadForm();
-        if ($leadForm->load(Yii::$app->request->post()) && $leadForm->createLead()) {
-            Yii::$app->session->setFlash('success', 'Лид успешно создан.');
-            return $this->redirect(['leads']);
+        $post = Yii::$app->request->post();
+        if ($leadForm->load($post)) {
+            $leadForm->photos = is_array($post['photos'] ?? null) ? $post['photos'] : [];
+            $leadForm->pdf = is_array($post['pdf'] ?? null) ? $post['pdf'] : [];
+            if ($leadForm->createLead()) {
+                Yii::$app->session->setFlash('success', 'Лид успешно создан.');
+                return $this->redirect(['leads']);
+            }
+            $errors = $leadForm->getFirstErrors();
+            $msg = empty($errors) ? 'Не удалось создать лид. Проверьте данные.' : implode(' ', $errors);
+            Yii::$app->session->setFlash('error', $msg);
+            Yii::warning([
+                'LeadForm errors' => $leadForm->getErrors(),
+                'attributes' => $leadForm->getAttributes(),
+            ], __METHOD__);
         }
-        Yii::$app->session->setFlash('error', 'Не удалось создать лид. Проверьте данные.');
         return $this->render('leads', [
             'leadForm' => $leadForm,
             'openLeadModal' => true,
@@ -61,16 +72,24 @@ class DefaultController extends AccessController
         }
         $telDigits = preg_replace('/\D+/', '', $q);
 
-        $profiles = UserProfile::find()
+        $where = ['or',
+            ['like', 'user_profile.f', $q],
+            ['like', 'user_profile.i', $q],
+            ['like', 'user_profile.o', $q],
+        ];
+
+
+        if(!empty($telDigits)){
+            $where[] = ['like', 'user.tel', $telDigits];
+        }
+
+        $query = UserProfile::find()
             ->joinWith('user')
-            ->where(['or',
-                    ['like', 'user.tel', $telDigits],
-                    ['like', 'user_profile.f', $q],
-                    ['like', 'user_profile.i', $q],
-                    ['like', 'user_profile.o', $q],
-                ])
-            ->limit(15)
-            ->all();
+            ->where($where)
+            ->limit(15);
+        $sql = $query->createCommand()->rawSql;
+
+        $profiles = $query->all();
 
         $out = [];
         foreach ($profiles as $p) {

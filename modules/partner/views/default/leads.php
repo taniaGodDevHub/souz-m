@@ -248,7 +248,7 @@ $searchClientUrl = \yii\helpers\Url::to(['/partner/default/search-client']);
                         </div>
                     </div>
                 </div>
-                <?= $form->field($leadForm, 'status_id')->hiddenInput(['value' => 1])->label(false) ?>
+                <?= $form->field($leadForm, 'status_id')->hiddenInput(['value' => 10])->label(false) ?>
 
 
 
