@@ -3,6 +3,7 @@
 namespace app\modules\partner\controllers;
 
 use app\controllers\AccessController;
+use app\models\Lead;
 use app\models\LeadForm;
 use app\models\User;
 use app\models\UserProfile;
@@ -20,8 +21,18 @@ class DefaultController extends AccessController
     public function actionLeads()
     {
         $leadForm = new LeadForm();
+        $partnerId = Yii::$app->user->isGuest ? null : (int) Yii::$app->user->id;
+        $leads = [];
+        if ($partnerId) {
+            $leads = Lead::find()
+                ->where(['partner_id' => $partnerId])
+                ->with(['client.profile', 'status', 'carMark', 'carModel', 'leadStatusHistories'])
+                ->orderBy(['date_add' => SORT_DESC])
+                ->all();
+        }
         return $this->render('leads', [
             'leadForm' => $leadForm,
+            'leads' => $leads,
         ]);
     }
 
@@ -48,6 +59,21 @@ class DefaultController extends AccessController
             'leadForm' => $leadForm,
             'openLeadModal' => true,
         ]);
+    }
+
+    /**
+     * Просмотр одной заявки (только свои по partner_id).
+     */
+    public function actionLead($id)
+    {
+        $lead = Lead::find()
+            ->where(['id' => (int) $id, 'partner_id' => (int) Yii::$app->user->id])
+            ->with(['client.profile', 'status', 'carMark', 'carModel', 'leadStatusHistories.status', 'leadFiles'])
+            ->one();
+        if (!$lead) {
+            throw new \yii\web\NotFoundHttpException('Заявка не найдена.');
+        }
+        return $this->render('lead', ['lead' => $lead]);
     }
 
     /**

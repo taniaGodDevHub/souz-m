@@ -1,6 +1,7 @@
 <?php
 /** @var yii\web\View $this */
 /** @var app\models\LeadForm $leadForm */
+/** @var app\models\Lead[] $leads */
 
 /** @var bool $openLeadModal */
 
@@ -23,6 +24,7 @@ $carMarkList = CarMark::getList();
 $openLeadModal = $openLeadModal ?? false;
 $carModelsUrl = \yii\helpers\Url::to(['/partner/default/car-models']);
 $searchClientUrl = \yii\helpers\Url::to(['/partner/default/search-client']);
+$leads = $leads ?? [];
 ?>
     <div class="partner-default-leads">
         <div class="row">
@@ -38,6 +40,8 @@ $searchClientUrl = \yii\helpers\Url::to(['/partner/default/search-client']);
             <div class="col-12 mt-5">
                 <div class="card card-transparent r-16">
                     <div class="card-body p-5">
+                        <?php if (empty($leads)): ?>
+                        <!--Если нет ни одной заявки у этого партнёра-->
                         <div class="row flex-column justify-content-center align-items-center">
                             <div class="col-auto mt-4">
                                 <h3>Вы ещё не создали ни одной заявки 😎</h3>
@@ -50,10 +54,73 @@ $searchClientUrl = \yii\helpers\Url::to(['/partner/default/search-client']);
                                 </button>
                             </div>
                         </div>
+                        <!--/Если нет ни одной заявки у этого партнёра-->
+                        <?php else: ?>
+                        <!--Если есть заявки - выводим списком-->
+                        <div class="d-flex justify-content-end mb-3">
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#leadModal">
+                                Создать заявку
+                            </button>
+                        </div>
+                        <div class="lead-cards">
+                            <?php foreach ($leads as $idx => $lead):
+                                $clientName = '—';
+                                if ($lead->client && $lead->client->profile) {
+                                    $p = $lead->client->profile;
+                                    $clientName = trim(($p->f ?? '') . ' ' . ($p->i ?? '') . ' ' . ($p->o ?? '')) ?: '—';
+                                }
+                                $dateFrom = $lead->date_add ? Yii::$app->formatter->asDate($lead->date_add, 'dd.MM.yyyy') : '—';
+                                $dateTo = $lead->dtp_date ? Yii::$app->formatter->asDate($lead->dtp_date, 'dd.MM.yyyy') : $dateFrom;
+                                $dateRange = $dateFrom . ($dateTo !== $dateFrom ? ' — ' . $dateTo : '');
+                                $histories = $lead->leadStatusHistories;
+                            ?>
+                            <div class="lead-card card card-shadow card-grey r-16 p-4 mb-4">
+                                <div class="lead-card__top d-flex flex-wrap align-items-center gap-3 gap-md-4 mb-3 pb-3 border-bottom">
+                                    <span class="lead-card__meta"><span class="text-muted">№</span> <?= (int)($idx + 1) ?></span>
+                                    <span class="lead-card__meta"><span class="text-muted">ID</span> <?= (int)$lead->id ?></span>
+                                    <span class="lead-card__meta"><span class="text-muted">Дата</span> <?= Html::encode($dateRange) ?></span>
+                                    <span class="lead-card__meta"><span class="text-muted">Клиент</span> <?= Html::encode($clientName) ?></span>
+                                    <span class="lead-card__meta"><span class="text-muted">Марка</span> <?= Html::encode($lead->carMark->name ?? '—') ?></span>
+                                    <span class="lead-card__meta"><span class="text-muted">Модель</span> <?= Html::encode($lead->carModel->name ?? '—') ?></span>
+                                    <span class="lead-card__status ms-auto d-flex align-items-center gap-2">
+                                        <span class="lead-card__status-dot lead-card__status-dot--success"></span>
+                                        <?= Html::encode($lead->status->name ?? '—') ?>
+                                    </span>
+                                </div>
+                                <div class="lead-card__bottom d-flex flex-wrap align-items-center gap-3">
+                                    <div class="lead-card__timeline flex-grow-1">
+                                        <?php if (!empty($histories)): ?>
+                                        <div class="lead-timeline">
+                                            <?php foreach ($histories as $hi => $h): ?>
+                                            <div class="lead-timeline__node">
+                                                <span class="lead-timeline__date"><?= $h->date_add ? Yii::$app->formatter->asDate($h->date_add, 'dd.MM.yyyy') : '—' ?></span>
+                                                <span class="lead-timeline__circle <?= $hi === count($histories) - 1 ? 'lead-timeline__circle--last' : '' ?>">
+                                                    <?php if ($hi === count($histories) - 1): ?>
+                                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg>
+                                                    <?php else: ?>
+                                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                                                    <?php endif; ?>
+                                                </span>
+                                                <span class="lead-timeline__label"><?= Html::encode($h->status->name ?? '—') ?></span>
+                                            </div>
+                                            <?php endforeach; ?>
+                                        </div>
+                                        <?php else: ?>
+                                        <span class="text-muted small">Нет истории статусов</span>
+                                        <?php endif; ?>
+                                    </div>
+                                    <span class="lead-card__amount"><?= '—' ?> Р</span>
+                                    <a href="<?= \yii\helpers\Url::to(['/partner/default/lead', 'id' => $lead->id]) ?>" class="lead-card__view-btn btn btn-dark rounded-circle p-2" title="Смотреть" aria-label="Смотреть">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                    </a>
+                                </div>
+                            </div>
+                            <?php endforeach; ?>
+                        </div>
+                        <!--/Если есть заявки - выводим списком-->
+                        <?php endif; ?>
                     </div>
                 </div>
-
-
             </div>
             <div class="col-12 mt-5">
                 <?= ArticleWidget::widget([]); ?>

@@ -123,4 +123,13 @@ class Lead extends ActiveRecord
     {
         return $this->hasMany(LeadFile::class, ['lead_id' => 'id']);
     }
+
+    /**
+     * История смены статусов лида (для таймлайна).
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLeadStatusHistories()
+    {
+        return $this->hasMany(LeadStatusHistory::class, ['lead_id' => 'id'])->orderBy(['date_add' => SORT_ASC])->with('status');
+    }
 }
