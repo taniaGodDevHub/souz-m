@@ -69,8 +69,10 @@ class DefaultController extends AccessController
                     ['like', 'user_profile.i', $q],
                     ['like', 'user_profile.o', $q],
                 ])
+            ->limit(15)
             ->all();
 
+        $out = [];
         foreach ($profiles as $p) {
 
             $f = $p->f;

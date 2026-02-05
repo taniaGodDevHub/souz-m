@@ -77,7 +77,7 @@ $searchClientUrl = \yii\helpers\Url::to(['/partner/default/search-client']);
                     ]); ?>
                     <div class="row">
                         <div class="col-12">
-                            <div class="card card-shadow card-grey r-16">
+                            <div class="card card-shadow card-grey r-16 p-5">
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-12">
@@ -101,7 +101,9 @@ $searchClientUrl = \yii\helpers\Url::to(['/partner/default/search-client']);
                                     </div>
                                     <div class="row">
                                         <div class="col-6">
-                                            <?= $form->field($leadForm, 'insurance_company_id')->dropDownList($insuranceList, ['prompt' => 'Страховая компания потерпевшего']) ?>
+                                            <?= $form->field($leadForm, 'insurance_company_id')
+                                                ->dropDownList($insuranceList, ['prompt' => 'Страховая компания потерпевшего'])
+                                                ->label(false)?>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -109,14 +111,14 @@ $searchClientUrl = \yii\helpers\Url::to(['/partner/default/search-client']);
                                             <?= $form->field($leadForm, 'car_mark_id')->dropDownList($carMarkList, [
                                                 'prompt' => 'Марка автомобиля',
                                                 'id' => 'leadform-car_mark_id',
-                                            ]) ?>
+                                            ])->label(false) ?>
                                         </div>
                                         <div class="col-12 col-md-3">
                                             <?= $form->field($leadForm, 'car_model_id')->dropDownList([], [
                                                 'prompt' => 'Модель автомобиля',
                                                 'id' => 'leadform-car_model_id',
                                                 'disabled' => true,
-                                            ]) ?>
+                                            ])->label(false) ?>
                                         </div>
                                         <div class="col-12 col-md-6">
                                             <?= $form->field($leadForm, 'car_number')->textInput([
@@ -124,7 +126,7 @@ $searchClientUrl = \yii\helpers\Url::to(['/partner/default/search-client']);
                                                 'placeholder' => 'А123БВ77',
                                                 'id' => 'leadform-car_number',
                                                 'autocomplete' => 'off',
-                                            ]) ?>
+                                            ])->label(false) ?>
                                         </div>
                                     </div>
                                 </div>
@@ -134,11 +136,60 @@ $searchClientUrl = \yii\helpers\Url::to(['/partner/default/search-client']);
 
                     <div class="row mt-5">
                         <div class="col-12">
-                            <div class="card card-shadow card-grey r-16">
+                            <div class="card card-shadow card-grey r-16 p-5">
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-12">
                                             <h3>Контакты клиента</h3>
+                                        </div>
+                                    </div>
+                                    <?= Html::activeHiddenInput($leadForm, 'client_id', ['id' => 'leadform-client_id']) ?>
+                                    <div class="row">
+                                        <div class="col-12 col-md-6 client-autocomplete-wrap">
+                                            <?= $form->field($leadForm, 'f')->textInput([
+                                                'placeholder' => 'Фамилия',
+                                                'id' => 'leadform-f',
+                                                'autocomplete' => 'off',
+                                            ])->label(false) ?>
+                                            <div class="client-autocomplete-list" data-for="f" style="display:none;"></div>
+                                        </div>
+                                        <div class="col-12 col-md-6 client-autocomplete-wrap">
+                                            <?= $form->field($leadForm, 'i')->textInput([
+                                                'placeholder' => 'Имя',
+                                                'id' => 'leadform-i',
+                                                'autocomplete' => 'off',
+                                            ])->label(false) ?>
+                                            <div class="client-autocomplete-list" data-for="i" style="display:none;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 col-md-6">
+                                            <?= $form->field($leadForm, 'o')->textInput([
+                                                'placeholder' => 'Отчество',
+                                                'id' => 'leadform-o',
+                                                'autocomplete' => 'off',
+                                            ])->label(false) ?>
+                                        </div>
+                                        <div class="col-12 col-md-6 client-autocomplete-wrap">
+                                            <?= $form->field($leadForm, 'tel')->textInput([
+                                                'placeholder' => '+7 (999) 999-99-99',
+                                                'id' => 'leadform-tel',
+                                                'autocomplete' => 'off',
+                                            ])->label(false) ?>
+                                            <div class="client-autocomplete-list" data-for="tel" style="display:none;"></div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <div class="row mt-5">
+                        <div class="col-12">
+                            <div class="card card-shadow card-grey r-16 p-5">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <h3>Материалы (файлы)</h3>
                                         </div>
                                     </div>
                                     <?= Html::activeHiddenInput($leadForm, 'client_id', ['id' => 'leadform-client_id']) ?>
