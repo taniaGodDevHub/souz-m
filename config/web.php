@@ -121,6 +121,9 @@ $config = [
         'stat' => [
             'class' => 'app\modules\stat\Stat',
         ],
+        'files' => [
+            'class' => 'app\modules\files\Files',
+        ],
     ],
     'params' => $params,
 ];
