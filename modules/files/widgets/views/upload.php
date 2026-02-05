@@ -117,6 +117,10 @@ $this->registerJs(<<<JS
     }
     function updateSlots() {
         var slots = getSlots();
+        while (slots.length < uploaded.length) {
+            grid.appendChild(createEmptySlot());
+            slots = getSlots();
+        }
         slots.forEach(function(slot, idx) {
             var inner = slot.querySelector('.files-upload-slot-inner');
             if (!inner) return;
@@ -142,7 +146,7 @@ $this->registerJs(<<<JS
                 inner.style.cursor = 'pointer';
             }
         });
-        if (uploaded.length < maxFiles && slots.length <= uploaded.length) {
+        if (uploaded.length < maxFiles && getSlots().length <= uploaded.length) {
             grid.appendChild(createEmptySlot());
         }
         renderHiddenInputs();
