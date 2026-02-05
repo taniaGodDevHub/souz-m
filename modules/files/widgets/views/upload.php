@@ -20,7 +20,8 @@ $showMulti = ($mode === 'multi' || $mode === 'both');
 $showItems = ($mode === 'items' || $mode === 'both');
 $headerText = $fileTypes !== '' ? $title . ' (' . $fileTypes . ')' : $title;
 ?>
-<div class="files-upload-widget" id="<?= Html::encode($id) ?>" data-upload-url="<?= Html::encode($uploadUrl) ?>" data-accept="<?= Html::encode($accept) ?>" data-max-files="<?= (int) $maxFiles ?>" data-max-bytes="<?= (int) $maxFileSizeBytes ?>" data-name="<?= Html::encode($name) ?>" data-is-image="<?= $isImage ? '1' : '0' ?>" data-mode="<?= Html::encode($mode) ?>">
+<?php $imgBase = rtrim(Yii::getAlias('@web/img'), '/') . '/'; ?>
+<div class="files-upload-widget" id="<?= Html::encode($id) ?>" data-upload-url="<?= Html::encode($uploadUrl) ?>" data-accept="<?= Html::encode($accept) ?>" data-max-files="<?= (int) $maxFiles ?>" data-max-bytes="<?= (int) $maxFileSizeBytes ?>" data-name="<?= Html::encode($name) ?>" data-is-image="<?= $isImage ? '1' : '0' ?>" data-mode="<?= Html::encode($mode) ?>" data-img-base="<?= Html::encode($imgBase) ?>">
     <div class="files-upload-header d-flex justify-content-between align-items-center flex-wrap gap-2">
         <div class="files-upload-title mb-0"><?= Html::encode($headerText) ?></div>
         <?php if ($showMulti): ?>
@@ -79,12 +80,26 @@ $this->registerJs(<<<JS
     var name = w.dataset.name || 'files';
     var isImage = w.dataset.isImage === '1';
     var mode = w.dataset.mode || 'both';
+    var imgBase = w.dataset.imgBase || '';
     var singleInput = w.querySelector('.files-upload-input-single');
     var multiInput = w.querySelector('.files-upload-input-multi');
     var hiddenContainer = w.querySelector('.files-upload-hidden-container');
-    var slots = w.querySelectorAll('.files-upload-slot');
+    var grid = w.querySelector('.files-upload-grid');
     var multiBtn = w.querySelector('.files-upload-multi-btn');
     var uploaded = [];
+    function getSlots() { return w.querySelectorAll('.files-upload-slot'); }
+    function getEmptySlotInnerHtml() {
+        return isImage ? '<span class="files-upload-icon files-upload-icon-camera"><img src="' + imgBase + 'photo-plus.svg" alt=""></span>' : '<span class="files-upload-icon files-upload-icon-plus"><img src="' + imgBase + 'plus.svg" alt=""></span>';
+    }
+    function createEmptySlot() {
+        var slot = document.createElement('div');
+        slot.className = 'files-upload-slot col-4 col-md-2 mb-3';
+        var inner = document.createElement('div');
+        inner.className = 'files-upload-slot-inner files-upload-slot-empty bg-white r-16';
+        inner.innerHTML = getEmptySlotInnerHtml();
+        slot.appendChild(inner);
+        return slot;
+    }
     function renderHiddenInputs() {
         hiddenContainer.innerHTML = '';
         uploaded.forEach(function(f, i) {
@@ -101,8 +116,10 @@ $this->registerJs(<<<JS
         });
     }
     function updateSlots() {
+        var slots = getSlots();
         slots.forEach(function(slot, idx) {
             var inner = slot.querySelector('.files-upload-slot-inner');
+            if (!inner) return;
             var item = uploaded[idx];
             inner.classList.remove('files-upload-slot-empty');
             inner.innerHTML = '';
@@ -121,17 +138,13 @@ $this->registerJs(<<<JS
                 inner.style.cursor = 'default';
             } else {
                 inner.classList.add('files-upload-slot-empty');
-                inner.innerHTML = isImage ? `<span class="files-upload-icon files-upload-icon-camera"><svg width="23" height="21" viewBox="0 0 23 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M17.75 5C19.5449 5 21 6.45507 21 8.25V9.5C21 10.6046 20.1046 11.5 19 11.5H18.25C17.6028 11.5 17.0709 11.9918 17.0068 12.6221L16.9932 12.8779C16.9291 13.5082 16.3972 14 15.75 14H15.5C14.6716 14 14 14.6716 14 15.5V16.5C14 17.8807 12.8807 19 11.5 19H5C2.79086 19 1 17.2091 1 15V9C1 6.79086 2.79086 5 5 5H17.75ZM11 9C9.34315 9 8 10.3431 8 12C8 13.6569 9.34315 15 11 15C12.6569 15 14 13.6569 14 12C14 10.3431 12.6569 9 11 9ZM12.9297 1C13.5984 1.00002 14.2228 1.33424 14.5938 1.89062L15.667 3.5H6.33301L7.40625 1.89062C7.77717 1.33424 8.40163 1.00002 9.07031 1H12.9297Z" fill="#28303F"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M18.8906 12.3107C19.3048 12.3107 19.6406 12.6464 19.6406 13.0607L19.6406 15.1391L21.7191 15.1391C22.1333 15.1391 22.4691 15.4749 22.4691 15.8891C22.4691 16.3033 22.1333 16.6391 21.7191 16.6391L19.6406 16.6391V18.7175C19.6406 19.1317 19.3048 19.4675 18.8906 19.4675C18.4764 19.4675 18.1406 19.1317 18.1406 18.7175V16.6391L16.0622 16.6391C15.648 16.6391 15.3122 16.3033 15.3122 15.8891C15.3122 15.4749 15.648 15.1391 16.0622 15.1391L18.1406 15.1391L18.1406 13.0607C18.1406 12.6464 18.4764 12.3107 18.8906 12.3107Z" fill="#28303F"/>
-</svg>
-</span>` : `<span class="files-upload-icon files-upload-icon-plus"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M4 12H20M12 4V20" stroke="#6E6B7C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
-</span>`;
+                inner.innerHTML = getEmptySlotInnerHtml();
                 inner.style.cursor = 'pointer';
             }
         });
+        if (uploaded.length < maxFiles && slots.length <= uploaded.length) {
+            grid.appendChild(createEmptySlot());
+        }
         renderHiddenInputs();
     }
     function doUpload(files, cb) {
@@ -158,15 +171,15 @@ $this->registerJs(<<<JS
             })
             .catch(function() { if (cb) cb(); updateSlots(); });
     }
-    if (mode === 'items' || mode === 'both') {
-        slots.forEach(function(slot) {
-            slot.addEventListener('click', function() {
-                var inner = slot.querySelector('.files-upload-slot-inner');
-                if (inner && inner.classList.contains('files-upload-slot-empty')) {
-                    singleInput.value = '';
-                    singleInput.click();
-                }
-            });
+    if (grid && (mode === 'items' || mode === 'both')) {
+        grid.addEventListener('click', function(e) {
+            var slot = e.target.closest('.files-upload-slot');
+            if (!slot) return;
+            var inner = slot.querySelector('.files-upload-slot-inner');
+            if (inner && inner.classList.contains('files-upload-slot-empty')) {
+                singleInput.value = '';
+                singleInput.click();
+            }
         });
     }
     singleInput.addEventListener('change', function() {

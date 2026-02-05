@@ -215,14 +215,29 @@ $searchClientUrl = \yii\helpers\Url::to(['/partner/default/search-client']);
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="row">
-                    <div class="col-md-6">
-                        <?= $form->field($leadForm, 'status_id')->dropDownList($statusList, ['prompt' => 'Выберите статус']) ?>
+                    <div class="row mt-5">
+                        <div class="col-12">
+                            <div class="card card-shadow card-grey r-16 p-5">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <h3>Отчёт партнёра</h3>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 client-autocomplete-wrap">
+                                            <?= $form->field($leadForm, 'report')->textarea(['rows' => 8, 'placeholder' => 'Отчёт по ДТП'])->label(false) ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <?= $form->field($leadForm, 'report')->textarea(['rows' => 4, 'placeholder' => 'Отчёт партнёра']) ?>
+                <?= $form->field($leadForm, 'status_id')->hiddenInput(['value' => 1])->label(false) ?>
+
+
 
                 <div class="modal-footer px-0 pb-0">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
