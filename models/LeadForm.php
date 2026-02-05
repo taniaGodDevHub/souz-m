@@ -29,6 +29,14 @@ class LeadForm extends Model
     public $car_number;
     /** @var int|null */
     public $client_id;
+    /** @var string|null Фамилия (user_profile.f) */
+    public $f;
+    /** @var string|null Имя (user_profile.i) */
+    public $i;
+    /** @var string|null Отчество (user_profile.o) */
+    public $o;
+    /** @var string|null Телефон (user.tel) */
+    public $tel;
     /** @var string|null */
     public $report;
     /** @var int|null */
@@ -38,9 +46,11 @@ class LeadForm extends Model
     {
         return [
             [['city_id', 'insurance_company_id', 'client_id', 'status_id', 'car_mark_id', 'car_model_id'], 'integer'],
-            [['dtp_date', 'dtp_time'], 'string'],
+            [['dtp_date', 'dtp_time', 'f', 'i', 'o', 'tel'], 'string'],
             [['report'], 'string'],
             [['car_number'], 'string', 'max' => 50],
+            [['f', 'i', 'o'], 'string', 'max' => 255],
+            [['tel'], 'string', 'max' => 20],
             [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => City::class, 'targetAttribute' => ['city_id' => 'id']],
             [['insurance_company_id'], 'exist', 'skipOnError' => true, 'targetClass' => InsuranceCompany::class, 'targetAttribute' => ['insurance_company_id' => 'id']],
             [['client_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['client_id' => 'id']],
@@ -61,6 +71,10 @@ class LeadForm extends Model
             'car_model_id' => 'Модель авто',
             'car_number' => 'Номер авто',
             'client_id' => 'Клиент',
+            'f' => 'Фамилия',
+            'i' => 'Имя',
+            'o' => 'Отчество',
+            'tel' => 'Телефон',
             'report' => 'Отчёт партнёра',
             'status_id' => 'Статус',
         ];
@@ -74,6 +88,14 @@ class LeadForm extends Model
     {
         if (!$this->validate()) {
             return null;
+        }
+
+        if (empty($this->client_id)) {
+            $user = $this->createClientUser();
+            if (!$user) {
+                return null;
+            }
+            $this->client_id = (int) $user->id;
         }
 
         $lead = new Lead();
@@ -118,5 +140,62 @@ class LeadForm extends Model
         }
         $ts = strtotime($date);
         return $ts !== false ? $ts : null;
+    }
+
+    /**
+     * Нормализует телефон до 7XXXXXXXXXX.
+     */
+    public static function normalizeTel(string $tel): string
+    {
+        $tel = preg_replace('/\D+/', '', $tel);
+        if (strlen($tel) === 11 && $tel[0] === '8') {
+            $tel = '7' . substr($tel, 1);
+        }
+        return $tel;
+    }
+
+    /**
+     * Создаёт пользователя и профиль с ролью client. Требует заполненный tel.
+     * @return User|null
+     */
+    protected function createClientUser(): ?User
+    {
+        $telNorm = self::normalizeTel(trim((string) $this->tel));
+        if (strlen($telNorm) !== 11 || $telNorm[0] !== '7') {
+            $this->addError('tel', 'Введите корректный телефон для создания клиента.');
+            return null;
+        }
+        $existing = User::findOne(['tel' => $telNorm, 'status' => User::STATUS_ACTIVE]);
+        if ($existing) {
+            $this->addError('tel', 'Пользователь с таким телефоном уже существует. Выберите его из подсказок.');
+            return null;
+        }
+
+        $user = new User();
+        $user->username = 'client_' . $telNorm;
+        $user->tel = $telNorm;
+        $user->email = $user->username . '@client.local';
+        $user->setPassword(Yii::$app->security->generateRandomString(12));
+        $user->generateAuthKey();
+
+        if (!$user->save(false)) {
+            $this->addError('tel', 'Не удалось создать пользователя.');
+            return null;
+        }
+
+        $profile = new UserProfile();
+        $profile->user_id = $user->id;
+        $profile->f = trim((string) $this->f) ?: null;
+        $profile->i = trim((string) $this->i) ?: null;
+        $profile->o = trim((string) $this->o) ?: null;
+        $profile->save(false);
+
+        $auth = Yii::$app->authManager;
+        $clientRole = $auth->getRole('client');
+        if ($clientRole) {
+            $auth->assign($clientRole, $user->id);
+        }
+
+        return $user;
     }
 }
