@@ -61,7 +61,7 @@ class UserProfileController extends AccessController
         $model->loadFromProfile($profile);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->saveToProfile($profile)) {
-            return $this->redirect(['view', 'id' => $profile->id]);
+            return $this->redirect(['update']);
         }
 
         return $this->render('update', [

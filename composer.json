@@ -20,7 +20,8 @@
         "yiisoft/yii2-symfonymailer": "~2.0.3",
         "dektrium/yii2-rbac": "1.0.0-alpha@dev",
         "yiisoft/yii2-httpclient": "^2.0",
-        "aki/yii2-bot-telegram": "*"
+        "aki/yii2-bot-telegram": "*",
+        "kartik-v/yii2-maskedinput": "^1.2"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

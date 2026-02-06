@@ -347,3 +347,16 @@ h3>*{
     justify-content: center;
     align-items: center;
 }
+
+.nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link {
+    color: #100E19;
+    background-color: transparent;
+    border: none;
+    border-bottom: 3px solid #F90042;
+}
+
+.nav-tabs .nav-link {
+    margin-bottom: calc(-1 * var(--bs-nav-tabs-border-width));
+    border: none;
+    color: var(--bs-secondary-color);
+}

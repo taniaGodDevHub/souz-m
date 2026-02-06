@@ -31,12 +31,12 @@ $editIcon = '<img src="' . Yii::getAlias('@web/img/edit-field.svg') . '" alt="Р
     </div>
 
     <div class="user-profile-form-field-row">
-        <?= $form->field($model, 'tel')->textInput(['maxlength' => true, 'disabled' => true, 'placeholder' => 'Телефон'])->label(false) ?>
+        <?= $form->field($model, 'tel')->textInput(['maxlength' => 18, 'disabled' => true, 'placeholder' => '+7 (___) ___-__-__', 'class' => 'form-control user-profile-input-tel'])->label(false) ?>
         <button type="button" class="user-profile-form-edit-btn" aria-label="Редактировать" title="Редактировать"><?= $editIcon ?></button>
     </div>
 
     <div class="user-profile-form-field-row">
-        <?= $form->field($model, 'tg_login')->textInput(['maxlength' => true, 'disabled' => true, 'placeholder' => 'Telegram без @'])->label(false) ?>
+        <?= $form->field($model, 'tg_login')->textInput(['maxlength' => 32, 'disabled' => true, 'placeholder' => 'Telegram без @', 'class' => 'form-control user-profile-input-tg'])->label(false) ?>
         <button type="button" class="user-profile-form-edit-btn" aria-label="Редактировать" title="Редактировать"><?= $editIcon ?></button>
     </div>
 
@@ -45,8 +45,8 @@ $editIcon = '<img src="' . Yii::getAlias('@web/img/edit-field.svg') . '" alt="Р
         <button type="button" class="user-profile-form-edit-btn" aria-label="Редактировать" title="Редактировать"><?= $editIcon ?></button>
     </div>
 
-    <div class="form-group">
-        <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
+    <div class="form-group d-flex justify-content-center">
+        <?= Html::submitButton('Сохранить', ['class' => 'btn btn-danger']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
@@ -54,6 +54,7 @@ $editIcon = '<img src="' . Yii::getAlias('@web/img/edit-field.svg') . '" alt="Р
 </div>
 
 <?php
+$this->registerJsFile('https://cdn.jsdelivr.net/npm/inputmask@5.0.8/dist/inputmask.min.js', ['position' => \yii\web\View::POS_HEAD]);
 $this->registerCss(<<<CSS
 .user-profile-form-field-row { position: relative; margin-bottom: 1rem; }
 .user-profile-form-field-row .form-group { margin-bottom: 0; }
@@ -81,6 +82,18 @@ CSS
 );
 $this->registerJs(<<<JS
 (function(){
+    var telInputs = document.querySelectorAll('.user-profile-input-tel');
+    if (typeof Inputmask !== 'undefined') {
+        telInputs.forEach(function(el) {
+            new Inputmask({ mask: '+7 (999) 999-99-99', placeholder: '_', clearIncomplete: true }).mask(el);
+        });
+    }
+    document.querySelectorAll('.user-profile-input-tg').forEach(function(el) {
+        el.addEventListener('input', function() {
+            var v = this.value.replace(/[^a-zA-Z0-9_]/g, '').slice(0, 32);
+            if (v !== this.value) this.value = v;
+        });
+    });
     document.querySelectorAll('.user-profile-form-edit-btn').forEach(function(btn){
         btn.addEventListener('click', function(){
             var row = this.closest('.user-profile-form-field-row');
