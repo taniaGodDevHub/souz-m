@@ -62,8 +62,8 @@ class DefaultController extends AccessController
                 continue;
             }
             $name = $file->name;
-            $safeName = preg_replace('/[^a-zA-Z0-9._-]/', '_', $name);
-            $safeName = time() . '_' . $safeName;
+            $ext = pathinfo($name, PATHINFO_EXTENSION);
+            $safeName = md5($name . time()) . ($ext !== '' ? '.' . $ext : '');
             $path = $fullDir . DIRECTORY_SEPARATOR . $safeName;
             if ($file->saveAs($path)) {
                 $relativePath = $subDir . '/' . $safeName;

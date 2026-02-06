@@ -5,6 +5,7 @@ namespace app\modules\partner\controllers;
 use app\controllers\AccessController;
 use app\models\Lead;
 use app\models\LeadForm;
+use app\models\LeadStatus;
 use app\models\User;
 use app\models\UserProfile;
 use app\modules\cars\models\CarModel;
@@ -16,6 +17,14 @@ class DefaultController extends AccessController
     public function actionIndex()
     {
         return $this->render('index');
+    }
+
+    /**
+     * Страница финансов партнёра.
+     */
+    public function actionBilling()
+    {
+        return $this->render('billing');
     }
 
     public function actionLeads()
@@ -30,9 +39,14 @@ class DefaultController extends AccessController
                 ->orderBy(['date_add' => SORT_DESC])
                 ->all();
         }
+        $timelineStatuses = LeadStatus::find()
+            ->where(['not in', 'id', [10, 80, 90]])
+            ->orderBy(['id' => SORT_ASC])
+            ->all();
         return $this->render('leads', [
             'leadForm' => $leadForm,
             'leads' => $leads,
+            'timelineStatuses' => $timelineStatuses,
         ]);
     }
 
@@ -68,7 +82,7 @@ class DefaultController extends AccessController
     {
         $lead = Lead::find()
             ->where(['id' => (int) $id, 'partner_id' => (int) Yii::$app->user->id])
-            ->with(['client.profile', 'status', 'carMark', 'carModel', 'leadStatusHistories.status', 'leadFiles'])
+            ->with(['client.profile', 'status', 'carMark', 'carModel', 'leadStatusHistories.status', 'leadFiles', 'insuranceCompany'])
             ->one();
         if (!$lead) {
             throw new \yii\web\NotFoundHttpException('Заявка не найдена.');

@@ -6,6 +6,8 @@ use yii\helpers\Html;
 /** @var app\models\UserProfileForm $model */
 /** @var app\models\UserProfile $profile */
 
+$this->title = 'Профиль';
+$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-profile-update">
 
@@ -13,15 +15,11 @@ use yii\helpers\Html;
         <div class="col-12">
             <div class="card card-grey r-16">
                 <div class="card-body p-4">
-                    <?php if(empty($profile->f) && empty($profile->i) && empty($profile->o)): ?>
-                        <div class="h3">
-                            Заполните данные формы
-                        </div>
-                    <?php else:?>
-                        <div class="h3">
-                            <?= $profile->f?> <?= $profile->i?> <?= $profile->o?>
-                        </div>
-                    <?php endif;?>
+                    <?php if (empty($profile->f) && empty($profile->i) && empty($profile->o)): ?>
+                        <div class="h3">Заполните данные формы</div>
+                    <?php else: ?>
+                        <div class="h3"><?= Html::encode($profile->f . ' ' . $profile->i . ' ' . $profile->o) ?></div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -42,7 +40,5 @@ use yii\helpers\Html;
             </div>
         </div>
     </div>
-
-
 
 </div>

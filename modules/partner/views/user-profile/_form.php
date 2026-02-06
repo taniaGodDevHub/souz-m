@@ -7,9 +7,8 @@ use yii\widgets\ActiveForm;
 /** @var app\models\UserProfileForm $model */
 /** @var yii\widgets\ActiveForm $form */
 
-$editIcon = '<img src="'. Yii::getAlias('@web/img/edit-field.svg').'" alt="Редактировать">';
+$editIcon = '<img src="' . Yii::getAlias('@web/img/edit-field.svg') . '" alt="Редактировать">';
 ?>
-
 <div class="user-profile-form">
 
     <?php $form = ActiveForm::begin(); ?>

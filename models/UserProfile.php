@@ -62,7 +62,16 @@ class UserProfile extends \yii\db\ActiveRecord
 
     public function getUser()
     {
-        return $this->hasOne(User::className(),['id'=>'user_id']);
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
+    /**
+     * Виртуальное поле: логин Telegram из связанной модели User.
+     * @return string
+     */
+    public function getTgLogin()
+    {
+        return $this->user ? (string) $this->user->tg_login : '';
     }
 
 }

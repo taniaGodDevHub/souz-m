@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\User;
 use app\models\UserProfile;
+use app\models\UserProfileForm;
 use app\models\UserProfileSearch;
 use app\modules\rbac\exceptions\ForbiddenHttpException;
 use Yii;
@@ -92,34 +93,29 @@ class UserProfileController extends AccessController
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id = false, $user_id = false)
+    public function actionUpdate()
     {
-        if (!$id && !$user_id) {
-            throw new BadRequestHttpException("Не переданы необходимые данные");
-        }
-        if ($id) {
-            $model = $this->findModel($id);
-        } elseif ($user_id) {
-            $model = UserProfile::find()
-                ->where(['user_id' => $user_id])
-                ->one();
+        $profile = UserProfile::find()
+            ->where(['user_id' => Yii::$app->user->identity->id])
+            ->with('user')
+            ->one();
+
+        if (empty($profile)) {
+            $profile = new UserProfile();
+            $profile->user_id = Yii::$app->user->identity->id;
+            $profile->save(false);
         }
 
-        if (empty($model)) {
-            $model = new UserProfile();
-            $model->user_id = Yii::$app->user->identity->id;
-            $model->save();
-        }
+        $model = new UserProfileForm();
+        $model->loadFromProfile($profile);
 
-        if (!Yii::$app->user->can('admin') && Yii::$app->user->identity->id != $model->user_id) {
-            throw new ForbiddenHttpException("Вы можете редактировать только свой профиль.");
-        }
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($this->request->isPost && $model->load($this->request->post()) && $model->saveToProfile($profile)) {
+            return $this->redirect(['view', 'id' => $profile->id]);
         }
 
         return $this->render('update', [
             'model' => $model,
+            'profile' => $profile,
         ]);
     }
 

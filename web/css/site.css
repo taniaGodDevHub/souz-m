@@ -155,6 +155,10 @@ a.desc:after {
 }
 .form-control{
     border: none;
+    padding: 1rem 0.75rem;
+}
+.form-control:disabled{
+    background-color: #F3F4F7;
 }
 
 h3{
@@ -244,7 +248,7 @@ h3>*{
 }
 
 /* Карточка заявки (лида) и таймлайн */
-.lead-card__meta .text-muted { font-size: 0.9em; }
+.lead-card__meta .text-muted { }
 .lead-card__status-dot {
     width: 10px;
     height: 10px;
@@ -272,11 +276,11 @@ h3>*{
 .lead-timeline__node:not(:last-child)::after {
     content: '';
     position: absolute;
-    top: 20px;
+    top: 50px;
     left: calc(50% + 20px);
     width: calc(100% - 20px);
-    height: 3px;
-    background: #ffc107;
+    height: 5px;
+    background: #FFDC4F;
     z-index: 0;
 }
 .lead-timeline__date {
@@ -286,8 +290,9 @@ h3>*{
     order: -1;
 }
 .lead-timeline__circle {
-    width: 32px;
-    height: 32px;
+    width: 60px;
+    height: 60px;
+    border: 5px solid #FFDC4F;
     border-radius: 50%;
     background: #ffc107;
     color: #000;
@@ -299,10 +304,46 @@ h3>*{
     z-index: 1;
 }
 .lead-timeline__circle--last { background: #ffc107; color: #dc3545; }
+.lead-timeline__circle--empty { background: #D9D9D9; color: #adb5bd; }
 .lead-timeline__label {
-    font-size: 0.75rem;
+    font-size: 13px;
+    color: #6E6B7C;
     text-align: center;
-    margin-top: 4px;
+    margin-top: 10px;
     max-width: 100px;
-    line-height: 1.2;
+}
+
+.card-partner-bonus{
+    border: none;
+}
+.partner-bonus-banner-text-block{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
+.partner-bonus-banner-text{
+    color: #ffffff;
+    font-size: 24px;
+}
+.partner-bonus-banner-text-yellow{
+    color: #FFDC4F;
+    font-size: 64px;
+    font-weight: 800;
+}
+
+.square-col {
+    padding-top: 100%; /* Создаем соотношение сторон 1:1 */
+    position: relative;
+}
+.square-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

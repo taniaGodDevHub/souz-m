@@ -25,7 +25,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 </head>
 <body class="d-flex flex-column h-100">
 <?php $this->beginBody() ?>
-<header id="header" class="pt-3 ps-3 pe-3">
+<header id="header" class="p-3">
     <div class="row justify-content-between">
         <div class="col-md-auto">
             <a class="navbar-brand" href="<?= URL::to(['/partner/default/index'])?>">
@@ -44,6 +44,10 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                 </div>
                 <div class="col-auto pb-3 nav-link-col">
                     <a class="nav-link" href="<?= URL::to(['/partner/default/billing'])?>">Финансы</a>
+                    <span class="nav-link-col-border"></span>
+                </div>
+                <div class="col-auto pb-3 nav-link-col">
+                    <a class="nav-link" href="<?= URL::to(['/partner/user-profile/update'])?>">Профиль</a>
                     <span class="nav-link-col-border"></span>
                 </div>
             </div>
