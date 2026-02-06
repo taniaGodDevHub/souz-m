@@ -5,6 +5,7 @@ use yii\helpers\Html;
 /** @var yii\web\View $this */
 /** @var app\models\UserProfileForm $model */
 /** @var app\models\UserProfile $profile */
+/** @var app\models\Requisites[] $requisites */
 
 $this->title = 'Профиль';
 $this->params['breadcrumbs'][] = $this->title;
@@ -68,8 +69,18 @@ $this->params['breadcrumbs'][] = $this->title;
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane fade" id="requisites-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
-
+                <div class="tab-pane fade" id="requisites-tab-pane" role="tabpanel" aria-labelledby="requisites-tab" tabindex="0">
+                    <?php if (!empty($requisites)): ?>
+                        <?php foreach ($requisites as $req): ?>
+                            <?= $this->render('_requisites_card', ['requisites' => $req]) ?>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <div class="card card-grey card-shadow r-16">
+                            <div class="card-body p-5 text-center text-body-secondary">
+                                Реквизиты не добавлены.
+                            </div>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>

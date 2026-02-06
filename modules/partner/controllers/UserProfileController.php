@@ -3,6 +3,7 @@
 namespace app\modules\partner\controllers;
 
 use app\controllers\AccessController;
+use app\models\Requisites;
 use app\models\UserProfile;
 use app\models\UserProfileForm;
 use Yii;
@@ -64,9 +65,15 @@ class UserProfileController extends AccessController
             return $this->redirect(['update']);
         }
 
+        $requisites = Requisites::find()
+            ->where(['user_id' => Yii::$app->user->identity->id])
+            ->with('requisitesType')
+            ->all();
+
         return $this->render('update', [
             'model' => $model,
             'profile' => $profile,
+            'requisites' => $requisites,
         ]);
     }
 
