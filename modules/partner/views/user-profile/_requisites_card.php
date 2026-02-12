@@ -28,7 +28,7 @@ $ndsText = $requisites->nds !== null && isset($ndsLabels[(int)$requisites->nds])
     ? $ndsLabels[(int)$requisites->nds]
     : ($requisites->nds !== null ? 'НДС ' . (int)$requisites->nds . '%' : 'Без НДС');
 
-$registrationAddress = ''; // в модели нет поля «адрес регистрации»
+$registrationAddress = $requisites->registration_address ?? '';
 ?>
 <div class="card card-grey card-shadow r-16 mb-4">
     <div class="card-body p-4 p-md-5">

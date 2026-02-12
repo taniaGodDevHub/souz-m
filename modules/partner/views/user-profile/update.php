@@ -6,6 +6,8 @@ use yii\helpers\Html;
 /** @var app\models\UserProfileForm $model */
 /** @var app\models\UserProfile $profile */
 /** @var app\models\Requisites[] $requisites */
+/** @var app\models\Requisites|null $requisitesForm */
+/** @var bool $activateRequisitesTab */
 
 $this->title = 'Профиль';
 $this->params['breadcrumbs'][] = $this->title;
@@ -74,10 +76,11 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?php foreach ($requisites as $req): ?>
                             <?= $this->render('_requisites_card', ['requisites' => $req]) ?>
                         <?php endforeach; ?>
-                    <?php else: ?>
+                    <?php elseif ($requisitesForm !== null): ?>
                         <div class="card card-grey card-shadow r-16">
-                            <div class="card-body p-5 text-center text-body-secondary">
-                                Реквизиты не добавлены.
+                            <div class="card-body p-4 p-md-5">
+                                <h3 class="mb-4">Добавление реквизитов</h3>
+                                <?= $this->render('_requisites_form', ['model' => $requisitesForm]) ?>
                             </div>
                         </div>
                     <?php endif; ?>
@@ -86,3 +89,17 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
+<?php if (!empty($activateRequisitesTab ?? false)): ?>
+<script>
+(function(){
+    var tab = document.querySelector('#requisites-tab');
+    var pane = document.querySelector('#requisites-tab-pane');
+    if (tab && pane) {
+        tab.classList.add('active');
+        document.querySelector('#profile-tab').classList.remove('active');
+        pane.classList.add('show', 'active');
+        document.querySelector('#profile-tab-pane').classList.remove('show', 'active');
+    }
+})();
+</script>
+<?php endif; ?>

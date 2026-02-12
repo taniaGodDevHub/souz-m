@@ -7,6 +7,7 @@ use app\models\Requisites;
 use app\models\UserProfile;
 use app\models\UserProfileForm;
 use Yii;
+use yii\helpers\Url;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
@@ -61,8 +62,18 @@ class UserProfileController extends AccessController
         $model = new UserProfileForm();
         $model->loadFromProfile($profile);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->saveToProfile($profile)) {
-            return $this->redirect(['update']);
+        $requisitesForm = null;
+        if ($this->request->isPost) {
+            $post = $this->request->post();
+            if (isset($post['Requisites'])) {
+                $requisitesForm = new Requisites();
+                $requisitesForm->user_id = Yii::$app->user->identity->id;
+                if ($requisitesForm->load($post) && $requisitesForm->save()) {
+                    return $this->redirect(Url::to(['update']) . '#requisites-tab-pane');
+                }
+            } elseif ($model->load($post) && $model->saveToProfile($profile)) {
+                return $this->redirect(['update']);
+            }
         }
 
         $requisites = Requisites::find()
@@ -70,10 +81,17 @@ class UserProfileController extends AccessController
             ->with('requisitesType')
             ->all();
 
+        if ($requisitesForm === null && empty($requisites)) {
+            $requisitesForm = new Requisites();
+            $requisitesForm->user_id = Yii::$app->user->identity->id;
+        }
+
         return $this->render('update', [
             'model' => $model,
             'profile' => $profile,
             'requisites' => $requisites,
+            'requisitesForm' => $requisitesForm,
+            'activateRequisitesTab' => $requisitesForm !== null && $requisitesForm->hasErrors(),
         ]);
     }
 

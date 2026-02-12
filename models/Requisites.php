@@ -43,6 +43,8 @@ use yii\behaviors\TimestampBehavior;
  * @property string|null $updated_at
  * @property string|null $counteragent_box_id
  * @property string|null $org_id
+ * @property string|null $payment_method
+ * @property string|null $registration_address
  *
  * @property RequisitesType $requisitesType
  * @property User $user
@@ -76,7 +78,7 @@ class Requisites extends ActiveRecord
                 'ur_name', 'ur_full_name', 'create_date', 'tel', 'email', 'signatory_fio', 'signatory_fio_genitive',
                 'signatory_post', 'inn', 'snils', 'passport', 'passport_org', 'passport_date', 'passport_org_code',
                 'kpp', 'ogrn', 'okpo', 'oktmo', 'bik', 'rs', 'ks', 'bank_name', 'date_birth', 'passport_birth_place',
-                'counteragent_box_id', 'org_id',
+                'counteragent_box_id', 'org_id', 'payment_method', 'registration_address',
             ], 'string'],
             [['ur_name'], 'string', 'max' => 500],
             [['ur_full_name'], 'string', 'max' => 1500],
@@ -85,6 +87,9 @@ class Requisites extends ActiveRecord
             [['passport_org_code'], 'string', 'max' => 8],
             [['requisites_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => RequisitesType::class, 'targetAttribute' => ['requisites_type_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
+            [['nds'], 'required', 'when' => function ($m) { return (int)$m->requisites_type_id === 3; }, 'message' => 'Введите ставку НДС'],
+            [['tel'], 'required', 'when' => function ($m) { return $m->payment_method === 'sbp'; }, 'message' => 'Введите номер телефона для СБП'],
+            [['rs', 'ks', 'bik'], 'required', 'when' => function ($m) { return $m->payment_method === 'bank'; }, 'message' => 'Заполните платёжные реквизиты'],
         ];
     }
 
@@ -126,6 +131,8 @@ class Requisites extends ActiveRecord
             'updated_at' => 'Обновлено',
             'counteragent_box_id' => 'Идентификатор ящика контрагента в Диадоке',
             'org_id' => 'Идентификатор организации в Диадоке',
+            'payment_method' => 'Способ оплаты',
+            'registration_address' => 'Адрес регистрации',
         ];
     }
 
